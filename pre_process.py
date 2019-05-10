@@ -1,7 +1,6 @@
 import os
 import pickle
 
-import numpy as np
 from ratelimit import limits, sleep_and_retry
 from tqdm import tqdm
 
@@ -36,17 +35,17 @@ if __name__ == "__main__":
     samples = []
     for i, item in tqdm(enumerate(file_names)):
         filename = item['filename']
-        class_id = item['class_id']
-        sub = item['subject']
         attr = get_attr(filename)
 
-        samples.append(
-            {'class_id': class_id, 'subject': sub, 'full_path': filename, 'attr': attr})
+        if len(attr) > 0:
+            class_id = item['class_id']
+            sub = item['subject']
 
-        if i == 20:
-            print(samples)
+            samples.append(
+                {'class_id': class_id, 'subject': sub, 'full_path': filename, 'attr': attr})
 
-    np.random.shuffle(samples)
+    print('num_samples: ' + str(len(samples)))
+
     with open(pickle_file, 'wb') as file:
         save = {
             'samples': samples
