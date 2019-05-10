@@ -34,7 +34,7 @@ if __name__ == "__main__":
     assert (len(file_names) == 494414), "Number of files is: {}!".format(len(file_names))
 
     samples = []
-    for item in tqdm(file_names):
+    for i, item in tqdm(enumerate(file_names)):
         filename = item['filename']
         class_id = item['class_id']
         sub = item['subject']
@@ -42,6 +42,9 @@ if __name__ == "__main__":
 
         samples.append(
             {'class_id': class_id, 'subject': sub, 'full_path': filename, 'attr': attr})
+
+        if i == 20:
+            print(samples)
 
     np.random.shuffle(samples)
     with open(pickle_file, 'wb') as file:
