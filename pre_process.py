@@ -8,7 +8,7 @@ from tqdm import tqdm
 from config import pickle_file
 from utils import get_face_attributes
 
-ONE_SECOND = 1
+ONE_SECOND = 0.95
 
 
 @sleep_and_retry
