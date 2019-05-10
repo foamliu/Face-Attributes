@@ -23,7 +23,7 @@ def get_face_attributes(filePath):
     image = base64.b64encode(get_file_content(filePath)).decode()
     result = aipFace.detect(image=image, image_type="BASE64", options=options)
     attr = {}
-    if result is not None and 'result' in result:
+    if result is not None and 'result' in result and result['result'] is not None:
         face = result['result']['face_list'][0]
         attr['location'] = face['location']
         attr['face_probability'] = face['face_probability']
