@@ -1,10 +1,11 @@
 import os
-import tqdm
-from config import pickle_file
 import pickle
-import numpy as np
-from utils import get_face_attributes
 
+import numpy as np
+from tqdm import tqdm
+
+from config import pickle_file
+from utils import get_face_attributes
 
 if __name__ == "__main__":
     subjects = [d for d in os.listdir('data/CASIA-WebFace') if os.path.isdir(os.path.join('data/CASIA-WebFace', d))]
