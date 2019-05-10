@@ -2,10 +2,19 @@ import os
 import pickle
 
 import numpy as np
+from ratelimit import limits
 from tqdm import tqdm
 
 from config import pickle_file
 from utils import get_face_attributes
+
+ONE_SECOND = 1
+
+
+@limits(calls=2, period=ONE_SECOND)
+def get_attr(fn):
+    return get_face_attributes(fn)
+
 
 if __name__ == "__main__":
     subjects = [d for d in os.listdir('data/CASIA-WebFace') if os.path.isdir(os.path.join('data/CASIA-WebFace', d))]
@@ -28,7 +37,7 @@ if __name__ == "__main__":
         filename = item['filename']
         class_id = item['class_id']
         sub = item['subject']
-        attr = get_face_attributes(filename)
+        attr = get_attr(filename)
 
         samples.append(
             {'class_id': class_id, 'subject': sub, 'full_path': filename, 'attr': attr})
