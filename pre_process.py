@@ -33,7 +33,7 @@ if __name__ == "__main__":
     assert (len(file_names) == 494414), "Number of files is: {}!".format(len(file_names))
 
     samples = []
-    for i, item in tqdm(enumerate(file_names)):
+    for item in tqdm(file_names):
         filename = item['filename']
         attr = get_attr(filename)
 
