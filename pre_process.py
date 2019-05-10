@@ -2,7 +2,7 @@ import os
 import pickle
 
 import numpy as np
-from ratelimit import limits
+from ratelimit import limits, sleep_and_retry
 from tqdm import tqdm
 
 from config import pickle_file
@@ -11,6 +11,7 @@ from utils import get_face_attributes
 ONE_SECOND = 1
 
 
+@sleep_and_retry
 @limits(calls=2, period=ONE_SECOND)
 def get_attr(fn):
     return get_face_attributes(fn)
