@@ -3,6 +3,7 @@ import tqdm
 from config import pickle_file
 import pickle
 import numpy as np
+from utils import get_face_attributes
 
 
 if __name__ == "__main__":
@@ -26,10 +27,10 @@ if __name__ == "__main__":
         filename = item['filename']
         class_id = item['class_id']
         sub = item['subject']
-        is_valid, landmarks = get_face_attributes(filename)
-        if is_valid:
-            samples.append(
-                {'class_id': class_id, 'subject': sub, 'full_path': filename, 'landmarks': landmarks})
+        attr = get_face_attributes(filename)
+
+        samples.append(
+            {'class_id': class_id, 'subject': sub, 'full_path': filename, 'attr': attr})
 
     np.random.shuffle(samples)
     with open(pickle_file, 'wb') as file:
