@@ -73,6 +73,9 @@ def compute_pmf_distribution(name):
 
     x = c.keys()
     y = c.values()
+    y = np.array(y)
+    y = y / y.sum()
+    y = list(y)
     plt.bar(x, y, color='blue')
     plt.title(name)
 
