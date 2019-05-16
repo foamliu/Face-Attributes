@@ -60,6 +60,27 @@ def compute_angle_distribution(name):
     plt.show()
 
 
+def compute_pmf_distribution(name):
+    print('computing {}...'.format(name))
+
+    c = dict()
+    for sample in tqdm(samples):
+        type = sample['attr'][name]['type']
+        if type in c:
+            c[type] += 1
+        else:
+            c[type] = 1
+
+    x = c.keys()
+    y = c.values()
+    plt.plot(x, y, 'r--')
+    plt.title(name)
+
+    plt.savefig('images/{}_dist.png'.format(name))
+    plt.grid(True)
+    plt.show()
+
+
 if __name__ == "__main__":
     with open(pickle_file, 'rb') as file:
         data = pickle.load(file)
@@ -69,6 +90,8 @@ if __name__ == "__main__":
     # compute_distribution('age')
     # compute_distribution('beauty')
 
-    compute_angle_distribution('pitch')
-    compute_angle_distribution('roll')
-    compute_angle_distribution('yaw')
+    # compute_angle_distribution('pitch')
+    # compute_angle_distribution('roll')
+    # compute_angle_distribution('yaw')
+
+    compute_pmf_distribution('expression')
