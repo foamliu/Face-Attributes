@@ -69,6 +69,6 @@ if __name__ == "__main__":
     # compute_distribution('age')
     # compute_distribution('beauty')
 
-    compute_distribution('pitch')
-    compute_distribution('roll')
-    compute_distribution('yaw')
+    compute_angle_distribution('pitch')
+    compute_angle_distribution('roll')
+    compute_angle_distribution('yaw')
