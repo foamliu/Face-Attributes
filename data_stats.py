@@ -72,7 +72,7 @@ def compute_pmf_distribution(name):
             c[type] = 1
 
     x = c.keys()
-    y = c.values()
+    y = list(c.values())
     y = np.array(y)
     y = y / y.sum()
     y = list(y)
