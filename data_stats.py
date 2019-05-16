@@ -73,7 +73,7 @@ def compute_pmf_distribution(name):
 
     x = c.keys()
     y = c.values()
-    plt.bar(x, y, 'r--')
+    plt.bar(x, y, 'b')
     plt.title(name)
 
     plt.savefig('images/{}_dist.png'.format(name))
