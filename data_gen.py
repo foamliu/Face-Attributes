@@ -1,4 +1,3 @@
-import os
 import pickle
 
 import cv2 as cv
@@ -6,7 +5,7 @@ from PIL import Image
 from torch.utils.data import Dataset
 from torchvision import transforms
 
-from config import IMG_DIR, pickle_file, num_train
+from config import pickle_file, num_train
 
 # Data augmentation and normalization for training
 # Just normalization for validation
@@ -16,7 +15,7 @@ data_transforms = {
         transforms.ToTensor(),
         transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]),
     ]),
-    'val': transforms.Compose([
+    'valid': transforms.Compose([
         transforms.ToTensor(),
         transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
     ]),
@@ -40,7 +39,8 @@ class FaceAttributesDataset(Dataset):
     def __getitem__(self, i):
         sample = self.samples[i]
         filename = sample['full_path']
-        label = sample['label']
+        beauty = sample['beauty']
+        label = [beauty]
 
         img = cv.imread(filename)  # BGR
         img = img[..., ::-1]  # RGB

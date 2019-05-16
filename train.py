@@ -14,16 +14,6 @@ from models import FaceAttributesModel
 from utils import parse_args, save_checkpoint, AverageMeter, clip_gradient, accuracy, get_logger
 
 
-def full_log(epoch):
-    full_log_dir = 'data/full_log'
-    if not os.path.isdir(full_log_dir):
-        os.mkdir(full_log_dir)
-    filename = 'angles_{}.txt'.format(epoch)
-    dst_file = os.path.join(full_log_dir, filename)
-    src_file = 'data/angles.txt'
-    copyfile(src_file, dst_file)
-
-
 def train_net(args):
     torch.manual_seed(7)
     np.random.seed(7)
