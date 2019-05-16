@@ -16,6 +16,8 @@ checkpoint = None  # path to checkpoint, None if none
 # Data parameters
 num_classes = 10575
 num_samples = 479653
+train_ratio = 0.9
+num_train = int(num_samples * train_ratio)
 DATA_DIR = 'data'
 IMG_DIR = 'data/CASIA-WebFace'
 pickle_file = DATA_DIR + '/' + 'CASIA-WebFace.pkl'
