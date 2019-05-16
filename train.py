@@ -10,7 +10,6 @@ from torch.optim.lr_scheduler import StepLR
 
 from config import device, grad_clip, print_freq
 from data_gen import FaceAttributesDataset
-
 from models import FaceAttributesModel
 from utils import parse_args, save_checkpoint, AverageMeter, clip_gradient, accuracy, get_logger
 
@@ -78,7 +77,6 @@ def train_net(args):
         # One epoch's training
         train_loss, train_top5_accs = train(train_loader=train_loader,
                                             model=model,
-                                            metric_fc=metric_fc,
                                             criterion=criterion,
                                             optimizer=optimizer,
                                             epoch=epoch,
@@ -92,11 +90,9 @@ def train_net(args):
         print('{} seconds'.format(delta.seconds))
 
         # One epoch's validation
-        valid_loss, valid_top5_accs = train(train_loader=train_loader,
+        valid_loss, valid_top5_accs = valid(valid_loader=valid_loader,
                                             model=model,
-                                            metric_fc=metric_fc,
                                             criterion=criterion,
-                                            optimizer=optimizer,
                                             epoch=epoch,
                                             logger=logger)
 
@@ -116,9 +112,8 @@ def train_net(args):
         save_checkpoint(epoch, epochs_since_improvement, model, optimizer, best_acc, is_best)
 
 
-def train(train_loader, model, metric_fc, criterion, optimizer, epoch, logger):
+def train(train_loader, model, criterion, optimizer, epoch, logger):
     model.train()  # train mode (dropout and batchnorm is used)
-    metric_fc.train()
 
     losses = AverageMeter()
     top5_accs = AverageMeter()
@@ -130,8 +125,7 @@ def train(train_loader, model, metric_fc, criterion, optimizer, epoch, logger):
         label = label.to(device)  # [N, 1]
 
         # Forward prop.
-        feature = model(img)  # embedding => [N, 512]
-        output = metric_fc(feature, label)  # class_id_out => [N, 10575]
+        output = model(img)  # embedding => [N, 512]
 
         # Calculate loss
         loss = criterion(output, label)
@@ -156,6 +150,40 @@ def train(train_loader, model, metric_fc, criterion, optimizer, epoch, logger):
             logger.info('Epoch: [{0}][{1}/{2}]\t'
                         'Loss {loss.val:.4f} ({loss.avg:.4f})\t'
                         'Top5 Accuracy {top5_accs.val:.3f} ({top5_accs.avg:.3f})'.format(epoch, i, len(train_loader),
+                                                                                         loss=losses,
+                                                                                         top5_accs=top5_accs))
+
+    return losses.avg, top5_accs.avg
+
+
+def valid(valid_loader, model, criterion, epoch, logger):
+    model.eval()  # eval mode (dropout and batchnorm is NOT used)
+
+    losses = AverageMeter()
+    top5_accs = AverageMeter()
+
+    # Batches
+    for i, (img, label) in enumerate(valid_loader):
+        # Move to GPU, if available
+        img = img.to(device)
+        label = label.to(device)  # [N, 1]
+
+        # Forward prop.
+        output = model(img)  # embedding => [N, 512]
+
+        # Calculate loss
+        loss = criterion(output, label)
+
+        # Keep track of metrics
+        losses.update(loss.item())
+        top5_accuracy = accuracy(output, label, 5)
+        top5_accs.update(top5_accuracy)
+
+        # Print status
+        if i % print_freq == 0:
+            logger.info('Epoch: [{0}][{1}/{2}]\t'
+                        'Loss {loss.val:.4f} ({loss.avg:.4f})\t'
+                        'Top5 Accuracy {top5_accs.val:.3f} ({top5_accs.avg:.3f})'.format(epoch, i, len(valid_loader),
                                                                                          loss=losses,
                                                                                          top5_accs=top5_accs))
 
