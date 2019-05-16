@@ -7,23 +7,27 @@ Deep Face Attributes.
 
 CASIA WebFace DataSet, 479,653 faces.
 
-Age distribution:
+### Age
 
 ![image](https://github.com/foamliu/Face-Attributes/raw/master/images/age_dist.png)
 
-Angle pitch distribution:
+### Euler angles:
+
+![image](https://github.com/foamliu/Face-Attributes/raw/master/images/euler_angles.png)
+
+Pitch:
 
 ![image](https://github.com/foamliu/Face-Attributes/raw/master/images/angle_pitch_dist.png)
 
-Angle yaw distribution:
+Yaw:
 
 ![image](https://github.com/foamliu/Face-Attributes/raw/master/images/angle_yaw_dist.png)
 
-Angle roll distribution:
+Roll:
 
 ![image](https://github.com/foamliu/Face-Attributes/raw/master/images/angle_roll_dist.png)
 
-Beauty distribution:
+### Beauty
 
 ![image](https://github.com/foamliu/Face-Attributes/raw/master/images/beauty_dist.png)
 
