@@ -73,7 +73,7 @@ def compute_pmf_distribution(name):
 
     x = c.keys()
     y = c.values()
-    plt.plot(x, y, 'r--')
+    plt.bar(x, y, 'r--')
     plt.title(name)
 
     plt.savefig('images/{}_dist.png'.format(name))
@@ -95,3 +95,8 @@ if __name__ == "__main__":
     # compute_angle_distribution('yaw')
 
     compute_pmf_distribution('expression')
+    compute_pmf_distribution('face_shape')
+    compute_pmf_distribution('face_type')
+    compute_pmf_distribution('gender')
+    compute_pmf_distribution('glasses')
+    compute_pmf_distribution('race')
