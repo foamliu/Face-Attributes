@@ -1,23 +1,16 @@
-import math
-
 import torch
-import torch.nn.functional as F
-import torch.utils.model_zoo as model_zoo
-import torchvision
 from torch import nn
-from torch.nn import Parameter
-from torchsummary import summary
-from torchvision import transforms
+from config import device
 
-from config import device, num_classes
-from utils import parse_args
+checkpoint = 'BEST_checkpoint.tar'
+print('loading model: {}...'.format(checkpoint))
+checkpoint = torch.load(checkpoint)
+model = checkpoint['model'].to(device)
+model.eval()
 
-
-class ArcFaceModel50(nn.Module):
+class FaceAttributesModel(nn.Module):
     def __init__(self, args):
-        super(ArcFaceModel50, self).__init__()
-
-        resnet = resnet50(pretrained=args.pretrained)
+        super(FaceAttributesModel, self).__init__()
 
         # Remove linear and pool layers (since we're not doing classification)
         modules = list(resnet.children())[:-2]

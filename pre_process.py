@@ -5,7 +5,7 @@ from ratelimit import limits, sleep_and_retry
 from tqdm import tqdm
 
 from config import pickle_file
-from utils import get_face_attributes
+from utils_aip import get_face_attributes
 
 ONE_SECOND = 1
 
