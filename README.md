@@ -7,6 +7,10 @@ Deep Face Attributes.
 
 CASIA WebFace DataSet, 479,653 faces.
 
+### Gender
+
+![image](https://github.com/foamliu/Face-Attributes/raw/master/images/gender_dist.png)
+
 ### Age
 
 ![image](https://github.com/foamliu/Face-Attributes/raw/master/images/age_dist.png)
@@ -30,6 +34,26 @@ Roll:
 ### Beauty
 
 ![image](https://github.com/foamliu/Face-Attributes/raw/master/images/beauty_dist.png)
+
+### Expression
+
+![image](https://github.com/foamliu/Face-Attributes/raw/master/images/expression_dist.png)
+
+### Face shape
+
+![image](https://github.com/foamliu/Face-Attributes/raw/master/images/face_shape_dist.png)
+
+### Face type
+
+![image](https://github.com/foamliu/Face-Attributes/raw/master/images/face_type_dist.png)
+
+### Glasses
+
+![image](https://github.com/foamliu/Face-Attributes/raw/master/images/glasses_dist.png)
+
+### Race
+
+![image](https://github.com/foamliu/Face-Attributes/raw/master/images/race_dist.png)
 
 ## Dependencies
 - PyTorch 1.0.0
