@@ -50,7 +50,6 @@ def train_net(args):
         start_epoch = checkpoint['epoch'] + 1
         epochs_since_improvement = checkpoint['epochs_since_improvement']
         model = checkpoint['model']
-        metric_fc = checkpoint['metric_fc']
         optimizer = checkpoint['optimizer']
 
     logger = get_logger()
