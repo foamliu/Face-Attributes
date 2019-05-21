@@ -1,11 +1,10 @@
 import pickle
 
-import cv2 as cv
-from PIL import Image
 from torch.utils.data import Dataset
 from torchvision import transforms
 
 from config import pickle_file, num_train
+from utils import align_face
 
 # Data augmentation and normalization for training
 # Just normalization for validation
@@ -38,15 +37,19 @@ class FaceAttributesDataset(Dataset):
 
     def __getitem__(self, i):
         sample = self.samples[i]
-        filename = sample['full_path']
-        beauty = sample['beauty']
-        label = [beauty]
+        full_path = sample['full_path']
+        landmarks = sample['landmarks']
 
-        img = cv.imread(filename)  # BGR
-        img = img[..., ::-1]  # RGB
-        img = Image.fromarray(img, 'RGB')  # RGB
-        img = self.transformer(img)  # RGB
+        try:
+            img = align_face(full_path, landmarks)
+        except Exception:
+            print('full_path: ' + full_path)
+            raise
 
+        img = transforms.ToPILImage()(img)
+        img = self.transformer(img)
+
+        label = sample['beauty']
         return img, label
 
     def __len__(self):

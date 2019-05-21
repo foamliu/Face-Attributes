@@ -1,9 +1,13 @@
 import argparse
 import logging
 
+import cv2 as cv
+import numpy as np
 import torch
 from PIL import Image
 
+from align_faces import get_reference_facial_points, warp_and_crop_face
+from config import image_h, image_w
 from mtcnn.detector import detect_faces
 
 
@@ -122,3 +126,23 @@ def get_face_attributes(full_path):
     except:
         pass
     return False, None
+
+
+def align_face(img_fn, facial5points):
+    raw = cv.imread(img_fn, True)
+    facial5points = np.reshape(facial5points, (2, 5))
+
+    crop_size = (image_h, image_w)
+
+    default_square = True
+    inner_padding_factor = 0.25
+    outer_padding = (0, 0)
+    output_size = (image_h, image_w)
+
+    # get the reference 5 landmarks position in the crop settings
+    reference_5pts = get_reference_facial_points(
+        output_size, inner_padding_factor, outer_padding, default_square)
+
+    # dst_img = warp_and_crop_face(raw, facial5points)
+    dst_img = warp_and_crop_face(raw, facial5points, reference_pts=reference_5pts, crop_size=crop_size)
+    return dst_img

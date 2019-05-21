@@ -14,7 +14,7 @@ print_freq = 100  # print training/validation stats  every __ batches
 checkpoint = None  # path to checkpoint, None if none
 
 # Data parameters
-num_classes = 10575
+beauty_num_classes = 101
 num_samples = 479653
 train_ratio = 0.9
 num_train = int(num_samples * train_ratio)

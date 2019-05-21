@@ -1,12 +1,9 @@
-import os
 from datetime import datetime
-from shutil import copyfile
 
 import numpy as np
 import torch
 from tensorboardX import SummaryWriter
 from torch import nn
-from torch.optim.lr_scheduler import StepLR
 
 from config import device, grad_clip, print_freq
 from data_gen import FaceAttributesDataset
@@ -56,12 +53,8 @@ def train_net(args):
     valid_dataset = FaceAttributesDataset('valid')
     valid_loader = torch.utils.data.DataLoader(valid_dataset, batch_size=args.batch_size, shuffle=False)
 
-    scheduler = StepLR(optimizer, step_size=args.lr_step, gamma=0.1)
-
     # Epochs
     for epoch in range(start_epoch, args.end_epoch):
-        scheduler.step()
-
         start = datetime.now()
         # One epoch's training
         train_loss, train_top5_accs = train(train_loader=train_loader,
@@ -170,9 +163,9 @@ def valid(valid_loader, model, criterion, epoch, logger):
 
         # Print status
         if i % print_freq == 0:
-            logger.info('Epoch: [{0}][{1}/{2}]\t'
+            logger.info('Validation: [{0}/{1}]\t'
                         'Loss {loss.val:.4f} ({loss.avg:.4f})\t'
-                        'Top5 Accuracy {top5_accs.val:.3f} ({top5_accs.avg:.3f})'.format(epoch, i, len(valid_loader),
+                        'Top5 Accuracy {top5_accs.val:.3f} ({top5_accs.avg:.3f})'.format(i, len(valid_loader),
                                                                                          loss=losses,
                                                                                          top5_accs=top5_accs))
 
