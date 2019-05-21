@@ -25,8 +25,8 @@ class FaceAttributesModel(nn.Module):
         x = self.pool(x)
         x = x.view(-1, 512)  # [N, 512]
 
-        beauty_out = F.relu(self.fc1(x))  # [N, 512]
-        beauty_out = self.age_pred(beauty_out)  # [N, 101]
+        beauty_out = F.relu(self.fc(x))  # [N, 512]
+        beauty_out = self.beauty_pred(beauty_out)  # [N, 101]
         return beauty_out
 
 
