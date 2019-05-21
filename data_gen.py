@@ -49,7 +49,7 @@ class FaceAttributesDataset(Dataset):
         img = transforms.ToPILImage()(img)
         img = self.transformer(img)
 
-        label = sample['beauty']
+        label = sample['attr']['beauty']
         return img, label
 
     def __len__(self):
