@@ -13,23 +13,27 @@ class FaceAttributesModel(nn.Module):
         # Remove linear and pool layers (since we're not doing classification)
         modules = list(resnet.children())[:-2]
         self.resnet = nn.Sequential(*modules)
-        self.pool = nn.AvgPool2d(4)
-        self.fc = nn.Linear(512, 512)
-        self.beauty_pred = nn.Linear(512, beauty_num_classes)
+        self.bn = nn.BatchNorm2d(2048)
+        self.dropout = nn.Dropout()
+        self.fc1 = nn.Linear(2048 * 4 * 4, 2048)
+
+        self.fc2 = nn.Linear(2048, beauty_num_classes)
         self.softmax = nn.Softmax(dim=-1)
 
-        nn.init.xavier_uniform_(self.fc.weight)
-        nn.init.xavier_uniform_(self.beauty_pred.weight)
+        nn.init.xavier_uniform_(self.fc1.weight)
+        nn.init.xavier_uniform_(self.fc2.weight)
 
     def forward(self, images):
-        x = self.resnet(images)  # [N, 512, 1, 1]
-        x = self.pool(x)
-        x = x.view(-1, 512)  # [N, 512]
+        x = self.resnet(images)  # [N, 2048, 4, 4]
+        x = self.bn(x)
+        x = self.dropout(x)
+        x = x.view(x.size(0), -1)
+        x = self.fc1(x)
 
-        beauty_out = F.relu(self.fc(x))  # [N, 512]
-        beauty_out = self.beauty_pred(beauty_out)  # [N, 101]
-        beauty_out = self.softmax(beauty_out)
-        return beauty_out
+        x = F.relu(x)  # [N, 2048]
+        x = self.fc2(x)  # [N, 101]
+        x = self.softmax(x)
+        return x
 
 
 if __name__ == "__main__":
