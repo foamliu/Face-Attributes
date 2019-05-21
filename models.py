@@ -16,6 +16,7 @@ class FaceAttributesModel(nn.Module):
         self.pool = nn.AvgPool2d(4)
         self.fc = nn.Linear(512, 512)
         self.beauty_pred = nn.Linear(512, beauty_num_classes)
+        self.softmax = nn.Softmax(dim=-1)
 
         nn.init.xavier_uniform_(self.fc.weight)
         nn.init.xavier_uniform_(self.beauty_pred.weight)
@@ -27,6 +28,7 @@ class FaceAttributesModel(nn.Module):
 
         beauty_out = F.relu(self.fc(x))  # [N, 512]
         beauty_out = self.beauty_pred(beauty_out)  # [N, 101]
+        beauty_out = self.softmax(beauty_out)
         return beauty_out
 
 
