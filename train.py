@@ -104,7 +104,7 @@ def train(train_loader, model, criterion, optimizer, epoch, logger):
     for i, (img, label) in enumerate(train_loader):
         # Move to GPU, if available
         img = img.to(device)
-        label = label.type(torch.LongTensor).to(device)  # [N, 1]
+        label = label.to(device)  # [N, 1]
 
         # Forward prop.
         output = model(img)  # embedding => [N, 512]
@@ -148,7 +148,7 @@ def valid(valid_loader, model, criterion, epoch, logger):
     for i, (img, label) in enumerate(valid_loader):
         # Move to GPU, if available
         img = img.to(device)
-        label = label.type(torch.LongTensor).to(device)  # [N, 1]
+        label = label.to(device)  # [N, 1]
 
         # Forward prop.
         output = model(img)  # embedding => [N, 512]
