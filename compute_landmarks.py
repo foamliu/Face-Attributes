@@ -8,6 +8,7 @@ from utils import get_face_attributes
 ONE_SECOND = 1
 
 if __name__ == "__main__":
+    print('loading {}...'.format(pickle_file))
     with open(pickle_file, 'rb') as file:
         data = pickle.load(file)
 
@@ -23,6 +24,7 @@ if __name__ == "__main__":
             sample['landmarks'] = landmarks
             samples.append(sample)
 
+    print('saving {}...'.format(pickle_file_landmarks))
     with open(pickle_file_landmarks, 'wb') as file:
         save = {
             'samples': samples
