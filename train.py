@@ -104,12 +104,10 @@ def train(train_loader, model, criterion, optimizer, epoch, logger):
     for i, (img, label) in enumerate(train_loader):
         # Move to GPU, if available
         img = img.to(device)
-        label = label.to(device)  # [N, 1]
-        print(label.size())
+        label = label.type(torch.LongTensor).to(device)  # [N, 1]
 
         # Forward prop.
         output = model(img)  # embedding => [N, 512]
-        print(output.size())
 
         # Calculate loss
         loss = criterion(output, label)
@@ -150,7 +148,7 @@ def valid(valid_loader, model, criterion, epoch, logger):
     for i, (img, label) in enumerate(valid_loader):
         # Move to GPU, if available
         img = img.to(device)
-        label = label.to(device)  # [N, 1]
+        label = label.type(torch.LongTensor).to(device)  # [N, 1]
 
         # Forward prop.
         output = model(img)  # embedding => [N, 512]

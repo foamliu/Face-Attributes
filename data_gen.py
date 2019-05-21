@@ -2,7 +2,7 @@ import pickle
 
 from torch.utils.data import Dataset
 from torchvision import transforms
-
+import math
 from config import pickle_file_landmarks, num_train
 from utils import align_face
 
@@ -49,7 +49,7 @@ class FaceAttributesDataset(Dataset):
         img = transforms.ToPILImage()(img)
         img = self.transformer(img)
 
-        label = sample['attr']['beauty']
+        label = round(sample['attr']['beauty'])
         return img, label
 
     def __len__(self):
