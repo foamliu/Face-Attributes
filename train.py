@@ -49,9 +49,9 @@ def train_net(args):
 
     # Custom dataloaders
     train_dataset = FaceAttributesDataset('train')
-    train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True)
+    train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True, num_workers=2)
     valid_dataset = FaceAttributesDataset('valid')
-    valid_loader = torch.utils.data.DataLoader(valid_dataset, batch_size=args.batch_size, shuffle=False)
+    valid_loader = torch.utils.data.DataLoader(valid_dataset, batch_size=args.batch_size, shuffle=False, num_workers=2)
 
     # Epochs
     for epoch in range(start_epoch, args.end_epoch):
@@ -105,9 +105,11 @@ def train(train_loader, model, criterion, optimizer, epoch, logger):
         # Move to GPU, if available
         img = img.to(device)
         label = label.to(device)  # [N, 1]
+        print(label.size())
 
         # Forward prop.
         output = model(img)  # embedding => [N, 512]
+        print(output.size())
 
         # Calculate loss
         loss = criterion(output, label)
