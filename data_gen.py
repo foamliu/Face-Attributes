@@ -3,7 +3,7 @@ import pickle
 from torch.utils.data import Dataset
 from torchvision import transforms
 
-from config import pickle_file, num_train
+from config import pickle_file_landmarks, num_train
 from utils import align_face
 
 # Data augmentation and normalization for training
@@ -23,7 +23,7 @@ data_transforms = {
 
 class FaceAttributesDataset(Dataset):
     def __init__(self, split):
-        with open(pickle_file, 'rb') as file:
+        with open(pickle_file_landmarks, 'rb') as file:
             data = pickle.load(file)
 
         samples = data['samples']
