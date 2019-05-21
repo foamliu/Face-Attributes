@@ -21,3 +21,4 @@ num_train = int(num_samples * train_ratio)
 DATA_DIR = 'data'
 IMG_DIR = 'data/CASIA-WebFace'
 pickle_file = DATA_DIR + '/' + 'CASIA-WebFace.pkl'
+pickle_file_landmarks = DATA_DIR + '/' + 'CASIA-WebFace-landmarks.pkl'

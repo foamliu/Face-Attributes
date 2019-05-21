@@ -2,6 +2,9 @@ import argparse
 import logging
 
 import torch
+from PIL import Image
+
+from mtcnn.detector import detect_faces
 
 
 def clip_gradient(optimizer, grad_clip):
@@ -103,3 +106,19 @@ def get_logger():
     logger.addHandler(handler)
     logger.setLevel(logging.DEBUG)
     return logger
+
+
+def get_face_attributes(full_path):
+    try:
+        img = Image.open(full_path).convert('RGB')
+        bounding_boxes, landmarks = detect_faces(img)
+
+        if len(landmarks) > 0:
+            landmarks = [int(round(x)) for x in landmarks[0]]
+            return True, landmarks
+
+    except KeyboardInterrupt:
+        raise
+    except:
+        pass
+    return False, None
