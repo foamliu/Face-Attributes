@@ -1,5 +1,6 @@
 import pickle
 
+import torch
 from torch.utils.data import Dataset
 from torchvision import transforms
 
@@ -54,7 +55,7 @@ class FaceAttributesDataset(Dataset):
         angle_roll = (sample['attr']['angle']['roll'] + 180) / 360
         angle_yaw = (sample['attr']['angle']['yaw'] + 180) / 360
         beauty = sample['attr']['beauty'] / 100.
-        return img, (age, angle_pitch, angle_roll, angle_yaw, beauty)
+        return img, torch.FloatTensor([age, angle_pitch, angle_roll, angle_yaw, beauty])
 
     def __len__(self):
         return len(self.samples)
