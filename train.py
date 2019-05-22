@@ -14,7 +14,7 @@ def train_net(args):
     np.random.seed(7)
     checkpoint = args.checkpoint
     start_epoch = 0
-    best_loss = 0
+    best_loss = float('inf')
     writer = SummaryWriter()
     epochs_since_improvement = 0
 
@@ -211,7 +211,7 @@ def valid(valid_loader, model, criterions, logger):
              face_type_loss.item(), gender_loss.item(), glasses_loss.item(), race_loss.item()])
 
     # Print status
-    logger.info('Validation: Loss {0:.4f}\nDetail: {1}'.format(losses.avg, str(loss_bag)))
+    logger.info('Validation: Loss {0:.4f}\nDetail: {1}\n'.format(losses.avg, str(loss_bag)))
 
     return losses.avg
 
