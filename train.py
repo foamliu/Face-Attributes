@@ -6,7 +6,7 @@ from torch import nn
 from config import device, grad_clip, print_freq
 from data_gen import FaceAttributesDataset
 from models import FaceAttributesModel
-from utils import parse_args, save_checkpoint, AverageMeter, clip_gradient, get_logger
+from utils import parse_args, save_checkpoint, AverageMeter, LossMeterBag, clip_gradient, get_logger
 
 
 def train_net(args):
@@ -89,6 +89,9 @@ def train(train_loader, model, criterions, optimizer, epoch, logger):
     model.train()  # train mode (dropout and batchnorm is used)
 
     losses = AverageMeter()
+    loss_bag = LossMeterBag(
+        ['age', 'pitch', 'roll', 'yaw', 'beauty', 'expression', 'face_prob', 'face_shape', 'face_type', 'gender',
+         'glasses', 'race'])
     MSELoss, CrossEntropyLoss = criterions
 
     # Batches
@@ -139,12 +142,16 @@ def train(train_loader, model, criterions, optimizer, epoch, logger):
 
         # Keep track of metrics
         losses.update(loss.item())
+        loss_bag.update(
+            [age_loss.item(), pitch_loss.item(), roll_loss.item(), yaw_loss.item(), beauty_loss.item(),
+             expression_loss.item(), face_prob_loss.item(), face_shape_loss.item(),
+             face_type_loss.item(), gender_loss.item(), glasses_loss.item(), race_loss.item()])
 
         # Print status
         if i % print_freq == 0:
             logger.info('Epoch: [{0}][{1}/{2}]\t'
-                        'Loss {loss.val:.4f} ({loss.avg:.4f})'.format(epoch, i, len(train_loader),
-                                                                      loss=losses))
+                        'Loss {loss.val:.4f} ({loss.avg:.4f})\t'
+                        'Detail: {3}'.format(epoch, i, len(train_loader), str(loss_bag), loss=losses))
 
     return losses.avg
 
