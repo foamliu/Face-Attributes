@@ -94,7 +94,7 @@ def train(train_loader, model, criterion, optimizer, epoch, logger):
     for i, (img, label) in enumerate(train_loader):
         # Move to GPU, if available
         img = img.to(device)
-        label = label.to(device)  # [N, 1]
+        label = label.type(torch.FloatTensor).to(device)  # [N, 1]
 
         # Forward prop.
         output = model(img)  # embedding => [N, 512]
