@@ -14,7 +14,8 @@ def name2idx(name):
                     'female': 0, 'male': 1,
                     'sun': 1, 'common': 2,
                     'yellow': 0, 'white': 1, 'black': 2, 'arabs': 3}
-    return lookup_table[name]
+
+    return lookup_table[name.strip()]
 
 
 # Data augmentation and normalization for training
