@@ -68,8 +68,6 @@ def train_net(args):
         valid_loss = valid(valid_loader=valid_loader,
                            model=model,
                            criterions=(MSELoss, CrossEntropyLoss),
-                           optimizer=optimizer,
-                           epoch=epoch,
                            logger=logger)
 
         writer.add_scalar('Valid_Loss', valid_loss, epoch)
@@ -145,10 +143,11 @@ def train(train_loader, model, criterions, optimizer, epoch, logger):
     return losses.avg
 
 
-def valid(valid_loader, model, criterion, epoch, logger):
+def valid(valid_loader, model, criterions, logger):
     model.eval()  # eval mode (dropout and batchnorm is NOT used)
 
     losses = AverageMeter()
+    MSELoss, CrossEntropyLoss = criterions
 
     # Batches
     for i, (img, label) in enumerate(valid_loader):
@@ -160,7 +159,30 @@ def valid(valid_loader, model, criterion, epoch, logger):
         output = model(img)  # embedding => [N, 512]
 
         # Calculate loss
-        loss = criterion(output, label)
+        age, pitch, roll, yaw, beauty, expression, face_prob, face_shape, face_type, gender, glasses, race = label
+        age_label = age.type(torch.FloatTensor).to(device)  # [N, 1]
+        pitch_label = pitch.type(torch.FloatTensor).to(device)  # [N, 1]
+        roll_label = roll.type(torch.FloatTensor).to(device)  # [N, 1]
+        yaw_label = yaw.type(torch.FloatTensor).to(device)  # [N, 1]
+        beauty_label = beauty.type(torch.FloatTensor).to(device)  # [N, 1]
+        face_prob_label = face_prob.type(torch.FloatTensor).to(device)  # [N, 1]
+        
+        age_out, pitch_out, roll_out, yaw_out, beauty_out, expression_out, face_prob_out, face_shape_out, face_type_out, gender_out, glasses_out, race_out = output
+
+        # Calculate loss
+        age_loss = MSELoss(age_out, age_label)
+        pitch_loss = MSELoss(pitch_out, pitch_label)
+        roll_loss = MSELoss(roll_out, roll_label)
+        yaw_loss = MSELoss(yaw_out, yaw_label)
+        beauty_loss = MSELoss(beauty_out, beauty_label)
+        expression_loss = CrossEntropyLoss(expression_out, expression)
+        face_prob_loss = MSELoss(face_prob_out, face_prob_label)
+        face_shape_loss = CrossEntropyLoss(face_shape_out, face_shape)
+        face_type_loss = CrossEntropyLoss(face_type_out, face_type)
+        gender_loss = CrossEntropyLoss(gender_out, gender)
+        glasses_loss = CrossEntropyLoss(glasses_out, glasses)
+        race_loss = CrossEntropyLoss(race_out, race)
+        loss = age_loss + pitch_loss + roll_loss + yaw_loss + beauty_loss + expression_loss + face_prob_loss + face_shape_loss + face_type_loss + gender_loss + glasses_loss + race_loss
 
         # Keep track of metrics
         losses.update(loss.item())
