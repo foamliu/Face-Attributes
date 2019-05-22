@@ -49,8 +49,12 @@ class FaceAttributesDataset(Dataset):
         img = transforms.ToPILImage()(img)
         img = self.transformer(img)
 
-        label = float(sample['attr']['beauty'] / 100.)
-        return img, label
+        age = sample['attr']['age'] / 100.
+        angle_pitch = (sample['attr']['angle']['pitch'] + 180) / 360
+        angle_roll = (sample['attr']['angle']['roll'] + 180) / 360
+        angle_yaw = (sample['attr']['angle']['yaw'] + 180) / 360
+        beauty = sample['attr']['beauty'] / 100.
+        return img, (age, angle_pitch, angle_roll, angle_yaw, beauty)
 
     def __len__(self):
         return len(self.samples)

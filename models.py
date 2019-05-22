@@ -15,7 +15,7 @@ class FaceAttributesModel(nn.Module):
         self.avg_pool = nn.AdaptiveAvgPool2d(1)
         self.bn = nn.BatchNorm2d(2048)
         self.dropout = nn.Dropout()
-        self.fc = nn.Linear(2048, 1)
+        self.fc = nn.Linear(2048, 5)
         self.sigmoid = nn.Sigmoid()
 
         nn.init.xavier_uniform_(self.fc.weight)
