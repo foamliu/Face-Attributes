@@ -15,7 +15,11 @@ class FaceAttributesModel(nn.Module):
         self.avg_pool = nn.AdaptiveAvgPool2d(1)
         self.bn = nn.BatchNorm2d(2048)
         self.dropout = nn.Dropout()
-        self.fc = nn.Linear(2048, 5)
+        self.age_pred = nn.Linear(2048, 1)
+        self.pitch_pred = nn.Linear(2048, 1)
+        self.roll_pred = nn.Linear(2048, 1)
+        self.yaw_pred = nn.Linear(2048, 1)
+        self.beauty_pred = nn.Linear(2048, 1)
         self.sigmoid = nn.Sigmoid()
 
         nn.init.xavier_uniform_(self.fc.weight)
@@ -25,9 +29,12 @@ class FaceAttributesModel(nn.Module):
         x = self.bn(x)
         x = self.dropout(x)
         x = x.view(x.size(0), -1)  # [N, 2048]
-        x = self.fc(x)
-        x = self.sigmoid(x)
-        return x
+        age_out = self.sigmoid(self.age_pred(x))
+        pitch_out = self.sigmoid(self.pitch_pred(x))
+        roll_out = self.sigmoid(self.roll_pred(x))
+        yaw_out = self.sigmoid(self.yaw_pred(x))
+        beauty_out = self.sigmoid(self.beauty_pred(x))
+        return age_out, pitch_out, roll_out, yaw_out, beauty_out
 
 
 if __name__ == "__main__":

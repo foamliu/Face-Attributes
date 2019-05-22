@@ -94,13 +94,23 @@ def train(train_loader, model, criterion, optimizer, epoch, logger):
     for i, (img, label) in enumerate(train_loader):
         # Move to GPU, if available
         img = img.to(device)
-        label = label.type(torch.FloatTensor).to(device)  # [N, 1]
-
+        age, pitch, roll, yaw, beauty = label
+        age_label = age.type(torch.FloatTensor).to(device)  # [N, 1]
+        pitch_label = pitch.type(torch.FloatTensor).to(device)  # [N, 1]
+        roll_label = roll.type(torch.FloatTensor).to(device)  # [N, 1]
+        yaw_label = yaw.type(torch.FloatTensor).to(device)  # [N, 1]
+        beauty_label = beauty.type(torch.FloatTensor).to(device)  # [N, 1]
         # Forward prop.
         output = model(img)  # embedding => [N, 512]
+        age_out, pitch_out, roll_out, yaw_out, beauty_out = output
 
         # Calculate loss
-        loss = criterion(output, label)
+        age_loss = criterion(age_out, age_label)
+        pitch_loss = criterion(pitch_out, pitch_label)
+        roll_loss = criterion(roll_out, roll_label)
+        yaw_loss = criterion(yaw_out, yaw_label)
+        beauty_loss = criterion(beauty_out, beauty_label)
+        loss = age_loss + pitch_loss + roll_loss + yaw_loss + beauty_loss
 
         # Back prop.
         optimizer.zero_grad()
