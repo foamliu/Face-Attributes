@@ -42,13 +42,13 @@ class FaceAttributesModel(nn.Module):
         roll_out = self.sigmoid(self.roll_pred(x))
         yaw_out = self.sigmoid(self.yaw_pred(x))
         beauty_out = self.sigmoid(self.beauty_pred(x))
-        expression_out = self.softmax(self.expression_pred(x))
+        expression_out = self.softmax(self.expression_pred(x), dim=-1)
         face_prob_out = self.sigmoid(self.face_prob_pred(x))
-        face_shape_out = self.softmax(self.face_shape_pred(x))
-        face_type_out = self.softmax(self.face_type_pred(x))
-        gender_out = self.softmax(self.gender_pred(x))
-        glasses_out = self.softmax(self.glasses_pred(x))
-        race_out = self.softmax(self.race_pred(x))
+        face_shape_out = self.softmax(self.face_shape_pred(x), dim=-1)
+        face_type_out = self.softmax(self.face_type_pred(x), dim=-1)
+        gender_out = self.softmax(self.gender_pred(x), dim=-1)
+        glasses_out = self.softmax(self.glasses_pred(x), dim=-1)
+        race_out = self.softmax(self.race_pred(x), dim=-1)
         return age_out, pitch_out, roll_out, yaw_out, beauty_out, expression_out, face_prob_out, face_shape_out, face_type_out, gender_out, glasses_out, race_out
 
 
