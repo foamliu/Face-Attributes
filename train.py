@@ -3,7 +3,7 @@ import torch
 from tensorboardX import SummaryWriter
 from torch import nn
 
-from config import device, grad_clip, print_freq
+from config import device, grad_clip, print_freq, name_list, loss_ratio
 from data_gen import FaceAttributesDataset
 from models import FaceAttributesModel
 from utils import parse_args, save_checkpoint, AverageMeter, LossMeterBag, clip_gradient, get_logger
@@ -89,9 +89,7 @@ def train(train_loader, model, criterions, optimizer, epoch, logger):
     model.train()  # train mode (dropout and batchnorm is used)
 
     losses = AverageMeter()
-    loss_bag = LossMeterBag(
-        ['age', 'pitch', 'roll', 'yaw', 'beauty', 'expression', 'face_prob', 'face_shape', 'face_type', 'gender',
-         'glasses', 'race'])
+    loss_bag = LossMeterBag(name_list)
     MSELoss, CrossEntropyLoss = criterions
 
     # Batches
@@ -128,7 +126,8 @@ def train(train_loader, model, criterions, optimizer, epoch, logger):
         gender_loss = CrossEntropyLoss(gender_out, gender_label)
         glasses_loss = CrossEntropyLoss(glasses_out, glasses_label)
         race_loss = CrossEntropyLoss(race_out, race_label)
-        loss = age_loss + pitch_loss + roll_loss + yaw_loss + beauty_loss + expression_loss + face_prob_loss + face_shape_loss + face_type_loss + gender_loss + glasses_loss + race_loss
+        loss = (age_loss + pitch_loss + roll_loss + yaw_loss + beauty_loss + face_prob_loss) * loss_ratio + \
+               expression_loss + face_shape_loss + face_type_loss + gender_loss + glasses_loss + race_loss
 
         # Back prop.
         optimizer.zero_grad()
@@ -160,6 +159,7 @@ def valid(valid_loader, model, criterions, logger):
     model.eval()  # eval mode (dropout and batchnorm is NOT used)
 
     losses = AverageMeter()
+    loss_bag = LossMeterBag(name_list)
     MSELoss, CrossEntropyLoss = criterions
 
     # Batches
@@ -195,13 +195,18 @@ def valid(valid_loader, model, criterions, logger):
         gender_loss = CrossEntropyLoss(gender_out, gender)
         glasses_loss = CrossEntropyLoss(glasses_out, glasses)
         race_loss = CrossEntropyLoss(race_out, race)
-        loss = age_loss + pitch_loss + roll_loss + yaw_loss + beauty_loss + expression_loss + face_prob_loss + face_shape_loss + face_type_loss + gender_loss + glasses_loss + race_loss
+        loss = (age_loss + pitch_loss + roll_loss + yaw_loss + beauty_loss + face_prob_loss) * loss_ratio + \
+               expression_loss + face_shape_loss + face_type_loss + gender_loss + glasses_loss + race_loss
 
         # Keep track of metrics
         losses.update(loss.item())
+        loss_bag.update(
+            [age_loss.item(), pitch_loss.item(), roll_loss.item(), yaw_loss.item(), beauty_loss.item(),
+             expression_loss.item(), face_prob_loss.item(), face_shape_loss.item(),
+             face_type_loss.item(), gender_loss.item(), glasses_loss.item(), race_loss.item()])
 
     # Print status
-    logger.info('Validation: Loss {loss.avg:.4f}'.format(loss=losses))
+    logger.info('Validation: Loss {.4f}\nDetail: {}'.format(losses.avg, str(loss_bag)))
 
     return losses.avg
 

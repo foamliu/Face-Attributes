@@ -74,7 +74,7 @@ class LossMeterBag(object):
     def __str__(self):
         ret = ''
         for name in self.name_list:
-            ret += '{} loss: {}({})\t'.format(name, self.meter_dict[name].val, self.meter_dict[name].avg)
+            ret += '{} loss: {.4f}({.4f})\t'.format(name, self.meter_dict[name].val, self.meter_dict[name].avg)
 
         return ret
 

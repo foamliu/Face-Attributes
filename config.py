@@ -12,6 +12,7 @@ num_workers = 1  # for data-loading; right now, only 1 works with h5py
 grad_clip = 5.  # clip gradients at an absolute value of
 print_freq = 100  # print training/validation stats  every __ batches
 checkpoint = None  # path to checkpoint, None if none
+loss_ratio = 100
 
 # Data parameters
 num_samples = 479653
@@ -21,3 +22,6 @@ DATA_DIR = 'data'
 IMG_DIR = 'data/CASIA-WebFace'
 pickle_file = DATA_DIR + '/' + 'CASIA-WebFace.pkl'
 pickle_file_landmarks = DATA_DIR + '/' + 'CASIA-WebFace-landmarks.pkl'
+
+name_list = ['age', 'pitch', 'roll', 'yaw', 'beauty', 'expression', 'face_prob', 'face_shape', 'face_type',
+             'gender', 'glasses', 'race']
