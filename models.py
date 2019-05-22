@@ -22,7 +22,7 @@ class FaceAttributesModel(nn.Module):
         self.beauty_pred = nn.Linear(2048, 1)
         self.sigmoid = nn.Sigmoid()
 
-        nn.init.xavier_uniform_(self.fc.weight)
+        # nn.init.xavier_uniform_(self.fc.weight)
 
     def forward(self, images):
         x = self.resnet(images)  # [N, 2048, 4, 4]
