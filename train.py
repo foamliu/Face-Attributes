@@ -44,7 +44,7 @@ def train_net(args):
 
     # Loss function
     MSELoss = nn.MSELoss().to(device)
-    CrossEntropyLoss = nn.CrossEntropyLoss.to(device)
+    CrossEntropyLoss = nn.CrossEntropyLoss().to(device)
 
     # Custom dataloaders
     train_dataset = FaceAttributesDataset('train')
