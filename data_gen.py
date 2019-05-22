@@ -1,11 +1,21 @@
 import pickle
 
-import torch
 from torch.utils.data import Dataset
 from torchvision import transforms
 
 from config import pickle_file_landmarks, num_train
 from utils import align_face
+
+
+def name2idx(name):
+    lookup_table = {'none': 0, 'smile': 1, 'laugh': 2,
+                    'square': 0, 'oval': 1, 'heart': 2, 'round': 3, 'tiangle': 4,
+                    'human': 0, 'cartoon': 1,
+                    'female': 0, 'male': 1,
+                    'sun': 1, 'common': 2,
+                    'yellow': 0, 'white': 1, 'black': 2, 'arabs': 3}
+    return lookup_table[name]
+
 
 # Data augmentation and normalization for training
 # Just normalization for validation
@@ -55,7 +65,14 @@ class FaceAttributesDataset(Dataset):
         roll = (sample['attr']['angle']['roll'] + 180) / 360
         yaw = (sample['attr']['angle']['yaw'] + 180) / 360
         beauty = sample['attr']['beauty'] / 100.
-        return img, (age, pitch, roll, yaw, beauty)
+        expression = name2idx(sample['attr']['expression']['type'])
+        face_prob = sample['attr']['face_probability']
+        face_shape = name2idx(sample['attr']['face_shape']['type'])
+        face_type = name2idx(sample['attr']['face_type']['type'])
+        gender = name2idx(sample['attr']['gender']['type'])
+        glasses = name2idx(sample['attr']['glasses']['type'])
+        race = name2idx(sample['attr']['race']['type'])
+        return img, (age, pitch, roll, yaw, beauty, expression, face_prob, face_shape, face_type, gender, glasses, race)
 
     def __len__(self):
         return len(self.samples)

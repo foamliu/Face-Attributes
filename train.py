@@ -43,7 +43,8 @@ def train_net(args):
     model = model.to(device)
 
     # Loss function
-    criterion = nn.MSELoss().to(device)
+    MSELoss = nn.MSELoss().to(device)
+    CrossEntropyLoss = nn.CrossEntropyLoss.to(device)
 
     # Custom dataloaders
     train_dataset = FaceAttributesDataset('train')
@@ -56,7 +57,7 @@ def train_net(args):
         # One epoch's training
         train_loss = train(train_loader=train_loader,
                            model=model,
-                           criterion=criterion,
+                           criterions=(MSELoss, CrossEntropyLoss),
                            optimizer=optimizer,
                            epoch=epoch,
                            logger=logger)
@@ -66,7 +67,8 @@ def train_net(args):
         # One epoch's validation
         valid_loss = valid(valid_loader=valid_loader,
                            model=model,
-                           criterion=criterion,
+                           criterions=(MSELoss, CrossEntropyLoss),
+                           optimizer=optimizer,
                            epoch=epoch,
                            logger=logger)
 
@@ -85,32 +87,41 @@ def train_net(args):
         save_checkpoint(epoch, epochs_since_improvement, model, optimizer, best_loss, is_best)
 
 
-def train(train_loader, model, criterion, optimizer, epoch, logger):
+def train(train_loader, model, criterions, optimizer, epoch, logger):
     model.train()  # train mode (dropout and batchnorm is used)
 
     losses = AverageMeter()
+    MSELoss, CrossEntropyLoss = criterions
 
     # Batches
     for i, (img, label) in enumerate(train_loader):
         # Move to GPU, if available
         img = img.to(device)
-        age, pitch, roll, yaw, beauty = label
+        age, pitch, roll, yaw, beauty, expression, face_prob, face_shape, face_type, gender, glasses, race = label
         age_label = age.type(torch.FloatTensor).to(device)  # [N, 1]
         pitch_label = pitch.type(torch.FloatTensor).to(device)  # [N, 1]
         roll_label = roll.type(torch.FloatTensor).to(device)  # [N, 1]
         yaw_label = yaw.type(torch.FloatTensor).to(device)  # [N, 1]
         beauty_label = beauty.type(torch.FloatTensor).to(device)  # [N, 1]
+        face_prob_label = face_prob.type(torch.FloatTensor).to(device)  # [N, 1]
         # Forward prop.
         output = model(img)  # embedding => [N, 512]
-        age_out, pitch_out, roll_out, yaw_out, beauty_out = output
+        age_out, pitch_out, roll_out, yaw_out, beauty_out, expression_out, face_prob_out, face_shape_out, face_type_out, gender_out, glasses_out, race_out = output
 
         # Calculate loss
-        age_loss = criterion(age_out, age_label)
-        pitch_loss = criterion(pitch_out, pitch_label)
-        roll_loss = criterion(roll_out, roll_label)
-        yaw_loss = criterion(yaw_out, yaw_label)
-        beauty_loss = criterion(beauty_out, beauty_label)
-        loss = age_loss + pitch_loss + roll_loss + yaw_loss + beauty_loss
+        age_loss = MSELoss(age_out, age_label)
+        pitch_loss = MSELoss(pitch_out, pitch_label)
+        roll_loss = MSELoss(roll_out, roll_label)
+        yaw_loss = MSELoss(yaw_out, yaw_label)
+        beauty_loss = MSELoss(beauty_out, beauty_label)
+        expression_loss = CrossEntropyLoss(expression_out, expression)
+        face_prob_loss = MSELoss(face_prob_out, face_prob_label)
+        face_shape_loss = CrossEntropyLoss(face_shape_out, face_shape)
+        face_type_loss = CrossEntropyLoss(face_type_out, face_type)
+        gender_loss = CrossEntropyLoss(gender_out, gender)
+        glasses_loss = CrossEntropyLoss(glasses_out, glasses)
+        race_loss = CrossEntropyLoss(race_out, race)
+        loss = age_loss + pitch_loss + roll_loss + yaw_loss + beauty_loss + expression_loss + face_prob_loss + face_shape_loss + face_type_loss + gender_loss + glasses_loss + race_loss
 
         # Back prop.
         optimizer.zero_grad()
