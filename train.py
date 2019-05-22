@@ -149,7 +149,7 @@ def train(train_loader, model, criterions, optimizer, epoch, logger):
         # Print status
         if i % print_freq == 0:
             logger.info('Epoch: [{0}][{1}/{2}]\t'
-                        'Loss {loss.val:.4f} ({loss.avg:.4f})\t'
+                        'Loss {loss.val:.4f} ({loss.avg:.4f})\n'
                         'Detail: {3}'.format(epoch, i, len(train_loader), str(loss_bag), loss=losses))
 
     return losses.avg
@@ -211,7 +211,7 @@ def valid(valid_loader, model, criterions, logger):
              face_type_loss.item(), gender_loss.item(), glasses_loss.item(), race_loss.item()])
 
     # Print status
-    logger.info('Validation: Loss {.4f}\nDetail: {}'.format(losses.avg, str(loss_bag)))
+    logger.info('Validation: Loss {0:.4f}\nDetail: {1}'.format(losses.avg, str(loss_bag)))
 
     return losses.avg
 
