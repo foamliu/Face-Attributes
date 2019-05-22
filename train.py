@@ -166,7 +166,6 @@ def valid(valid_loader, model, criterions, logger):
     for i, (img, label) in enumerate(valid_loader):
         # Move to GPU, if available
         img = img.to(device)
-        label = label.to(device)  # [N, 1]
 
         # Forward prop.
         output = model(img)  # embedding => [N, 512]
@@ -178,7 +177,13 @@ def valid(valid_loader, model, criterions, logger):
         roll_label = roll.type(torch.FloatTensor).to(device)  # [N, 1]
         yaw_label = yaw.type(torch.FloatTensor).to(device)  # [N, 1]
         beauty_label = beauty.type(torch.FloatTensor).to(device)  # [N, 1]
+        expression_label = expression.to(device)  # [N, 1]
         face_prob_label = face_prob.type(torch.FloatTensor).to(device)  # [N, 1]
+        face_shape_label = face_shape.to(device)  # [N, 1]
+        face_type_label = face_type.to(device)  # [N, 1]
+        gender_label = gender.to(device)  # [N, 1]
+        glasses_label = glasses.to(device)  # [N, 1]
+        race_label = race.to(device)  # [N, 1]
 
         age_out, pitch_out, roll_out, yaw_out, beauty_out, expression_out, face_prob_out, face_shape_out, face_type_out, gender_out, glasses_out, race_out = output
 
@@ -188,13 +193,13 @@ def valid(valid_loader, model, criterions, logger):
         roll_loss = MSELoss(roll_out, roll_label)
         yaw_loss = MSELoss(yaw_out, yaw_label)
         beauty_loss = MSELoss(beauty_out, beauty_label)
-        expression_loss = CrossEntropyLoss(expression_out, expression)
+        expression_loss = CrossEntropyLoss(expression_out, expression_label)
         face_prob_loss = MSELoss(face_prob_out, face_prob_label)
-        face_shape_loss = CrossEntropyLoss(face_shape_out, face_shape)
-        face_type_loss = CrossEntropyLoss(face_type_out, face_type)
-        gender_loss = CrossEntropyLoss(gender_out, gender)
-        glasses_loss = CrossEntropyLoss(glasses_out, glasses)
-        race_loss = CrossEntropyLoss(race_out, race)
+        face_shape_loss = CrossEntropyLoss(face_shape_out, face_shape_label)
+        face_type_loss = CrossEntropyLoss(face_type_out, face_type_label)
+        gender_loss = CrossEntropyLoss(gender_out, gender_label)
+        glasses_loss = CrossEntropyLoss(glasses_out, glasses_label)
+        race_loss = CrossEntropyLoss(race_out, race_label)
         loss = (age_loss + pitch_loss + roll_loss + yaw_loss + beauty_loss + face_prob_loss) * loss_ratio + \
                expression_loss + face_shape_loss + face_type_loss + gender_loss + glasses_loss + race_loss
 
