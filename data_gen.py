@@ -9,7 +9,7 @@ from utils import align_face
 
 def name2idx(name):
     lookup_table = {'none': 0, 'smile': 1, 'laugh': 2,
-                    'square': 0, 'oval': 1, 'heart': 2, 'round': 3, 'tiangle': 4,
+                    'square': 0, 'oval': 1, 'heart': 2, 'round': 3, 'triangle': 4,
                     'human': 0, 'cartoon': 1,
                     'female': 0, 'male': 1,
                     'sun': 1, 'common': 2,
