@@ -119,15 +119,14 @@ def train(train_loader, model, criterions, optimizer, epoch, logger):
         roll_loss = MSELoss(roll_out, roll_label)
         yaw_loss = MSELoss(yaw_out, yaw_label)
         beauty_loss = MSELoss(beauty_out, beauty_label)
-        expression_loss = CrossEntropyLoss(expression_out, expression_label)
+        expression_loss = CrossEntropyLoss(expression_out, expression_label) * loss_ratio
         face_prob_loss = MSELoss(face_prob_out, face_prob_label)
-        face_shape_loss = CrossEntropyLoss(face_shape_out, face_shape_label)
-        face_type_loss = CrossEntropyLoss(face_type_out, face_type_label)
-        gender_loss = CrossEntropyLoss(gender_out, gender_label)
-        glasses_loss = CrossEntropyLoss(glasses_out, glasses_label)
-        race_loss = CrossEntropyLoss(race_out, race_label)
-        loss = (age_loss + pitch_loss + roll_loss + yaw_loss + beauty_loss + face_prob_loss) * loss_ratio + \
-               expression_loss + face_shape_loss + face_type_loss + gender_loss + glasses_loss + race_loss
+        face_shape_loss = CrossEntropyLoss(face_shape_out, face_shape_label) * loss_ratio
+        face_type_loss = CrossEntropyLoss(face_type_out, face_type_label) * loss_ratio
+        gender_loss = CrossEntropyLoss(gender_out, gender_label) * loss_ratio
+        glasses_loss = CrossEntropyLoss(glasses_out, glasses_label) * loss_ratio
+        race_loss = CrossEntropyLoss(race_out, race_label) * loss_ratio
+        loss = age_loss + pitch_loss + roll_loss + yaw_loss + beauty_loss + face_prob_loss + expression_loss + face_shape_loss + face_type_loss + gender_loss + glasses_loss + race_loss
 
         # Back prop.
         optimizer.zero_grad()
@@ -193,15 +192,14 @@ def valid(valid_loader, model, criterions, logger):
         roll_loss = MSELoss(roll_out, roll_label)
         yaw_loss = MSELoss(yaw_out, yaw_label)
         beauty_loss = MSELoss(beauty_out, beauty_label)
-        expression_loss = CrossEntropyLoss(expression_out, expression_label)
+        expression_loss = CrossEntropyLoss(expression_out, expression_label) * loss_ratio
         face_prob_loss = MSELoss(face_prob_out, face_prob_label)
-        face_shape_loss = CrossEntropyLoss(face_shape_out, face_shape_label)
-        face_type_loss = CrossEntropyLoss(face_type_out, face_type_label)
-        gender_loss = CrossEntropyLoss(gender_out, gender_label)
-        glasses_loss = CrossEntropyLoss(glasses_out, glasses_label)
-        race_loss = CrossEntropyLoss(race_out, race_label)
-        loss = (age_loss + pitch_loss + roll_loss + yaw_loss + beauty_loss + face_prob_loss) * loss_ratio + \
-               expression_loss + face_shape_loss + face_type_loss + gender_loss + glasses_loss + race_loss
+        face_shape_loss = CrossEntropyLoss(face_shape_out, face_shape_label) * loss_ratio
+        face_type_loss = CrossEntropyLoss(face_type_out, face_type_label) * loss_ratio
+        gender_loss = CrossEntropyLoss(gender_out, gender_label) * loss_ratio
+        glasses_loss = CrossEntropyLoss(glasses_out, glasses_label) * loss_ratio
+        race_loss = CrossEntropyLoss(race_out, race_label) * loss_ratio
+        loss = age_loss + pitch_loss + roll_loss + yaw_loss + beauty_loss + face_prob_loss + expression_loss + face_shape_loss + face_type_loss + gender_loss + glasses_loss + race_loss
 
         # Keep track of metrics
         losses.update(loss.item())
