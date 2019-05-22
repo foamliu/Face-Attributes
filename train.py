@@ -126,7 +126,8 @@ def train(train_loader, model, criterions, optimizer, epoch, logger):
         gender_loss = CrossEntropyLoss(gender_out, gender_label)
         glasses_loss = CrossEntropyLoss(glasses_out, glasses_label)
         race_loss = CrossEntropyLoss(race_out, race_label)
-        loss = age_loss + pitch_loss + roll_loss + yaw_loss + beauty_loss + face_prob_loss + expression_loss + face_shape_loss + face_type_loss + gender_loss + glasses_loss + race_loss
+        loss = torch.mean(age_loss, pitch_loss, roll_loss, yaw_loss, beauty_loss, face_prob_loss, expression_loss,
+                          face_shape_loss, face_type_loss, gender_loss, glasses_loss, race_loss)
 
         # Back prop.
         optimizer.zero_grad()
@@ -199,7 +200,8 @@ def valid(valid_loader, model, criterions, logger):
         gender_loss = CrossEntropyLoss(gender_out, gender_label)
         glasses_loss = CrossEntropyLoss(glasses_out, glasses_label)
         race_loss = CrossEntropyLoss(race_out, race_label)
-        loss = age_loss + pitch_loss + roll_loss + yaw_loss + beauty_loss + face_prob_loss + expression_loss + face_shape_loss + face_type_loss + gender_loss + glasses_loss + race_loss
+        loss = torch.mean(age_loss, pitch_loss, roll_loss, yaw_loss, beauty_loss, face_prob_loss, expression_loss,
+                          face_shape_loss, face_type_loss, gender_loss, glasses_loss, race_loss)
 
         # Keep track of metrics
         losses.update(loss.item())
