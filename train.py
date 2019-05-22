@@ -120,7 +120,7 @@ def train(train_loader, model, criterions, optimizer, epoch, logger):
         yaw_loss = MSELoss(yaw_out, yaw_label) * loss_ratio
         beauty_loss = MSELoss(beauty_out, beauty_label) * loss_ratio
         expression_loss = CrossEntropyLoss(expression_out, expression_label)
-        face_prob_loss = MSELoss(face_prob_out, face_prob_label) * loss_ratio
+        face_prob_loss = MSELoss(face_prob_out, face_prob_label)
         face_shape_loss = CrossEntropyLoss(face_shape_out, face_shape_label)
         face_type_loss = CrossEntropyLoss(face_type_out, face_type_label)
         gender_loss = CrossEntropyLoss(gender_out, gender_label)
@@ -194,7 +194,7 @@ def valid(valid_loader, model, criterions, logger):
         yaw_loss = MSELoss(yaw_out, yaw_label) * loss_ratio
         beauty_loss = MSELoss(beauty_out, beauty_label) * loss_ratio
         expression_loss = CrossEntropyLoss(expression_out, expression_label)
-        face_prob_loss = MSELoss(face_prob_out, face_prob_label) * loss_ratio
+        face_prob_loss = MSELoss(face_prob_out, face_prob_label)
         face_shape_loss = CrossEntropyLoss(face_shape_out, face_shape_label)
         face_type_loss = CrossEntropyLoss(face_type_out, face_type_label)
         gender_loss = CrossEntropyLoss(gender_out, gender_label)
