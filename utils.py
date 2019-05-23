@@ -169,7 +169,7 @@ glasses_dict = {0: 'none', 1: 'sun', 2: 'common'}
 race_dict = {0: 'yellow', 1: 'white', 2: 'black', 3: 'arabs'}
 
 
-def idx2name(tag, idx):
+def idx2name(idx, tag):
     name = None
     if tag == 'expression':
         name = expression_dict[idx]
