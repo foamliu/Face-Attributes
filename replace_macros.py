@@ -15,18 +15,18 @@ def get_attrs(item, split):
     gender = item['gender_' + split]
     glasses = item['glasses_' + split]
     race = item['race_' + split]
-    result = 'age: {}\n'.format(age)
-    result += 'pitch: {}\n'.format(pitch)
-    result += 'roll: {}\n'.format(roll)
-    result += 'yaw: {}\n'.format(yaw)
-    result += 'beauty: {}\n'.format(beauty)
-    result += 'expression: {}\n'.format(expression)
-    result += 'face_prob: {}\n'.format(face_prob)
-    result += 'face_shape: {}\n'.format(face_shape)
-    result += 'face_type: {}\n'.format(face_type)
-    result += 'gender: {}\n'.format(gender)
-    result += 'glasses: {}\n'.format(glasses)
-    result += 'race: {}\n'.format(race)
+    result = 'age: {}<br>'.format(age)
+    result += 'pitch: {}<br>'.format(pitch)
+    result += 'roll: {}<br>'.format(roll)
+    result += 'yaw: {}<br>'.format(yaw)
+    result += 'beauty: {}<br>'.format(beauty)
+    result += 'expression: {}<br>'.format(expression)
+    result += 'face_prob: {}<br>'.format(face_prob)
+    result += 'face_shape: {}<br>'.format(face_shape)
+    result += 'face_type: {}<br>'.format(face_type)
+    result += 'gender: {}<br>'.format(gender)
+    result += 'glasses: {}<br>'.format(glasses)
+    result += 'race: {}'.format(race)
     return result
 
 
