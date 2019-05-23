@@ -1,8 +1,8 @@
 import pickle
-
+from PIL import Image
 from torch.utils.data import Dataset
 from torchvision import transforms
-
+from mtcnn.detector import detect_faces
 from config import pickle_file_landmarks, num_train
 from utils import align_face
 
@@ -50,13 +50,10 @@ class FaceAttributesDataset(Dataset):
     def __getitem__(self, i):
         sample = self.samples[i]
         full_path = sample['full_path']
-        landmarks = sample['landmarks']
 
-        try:
-            img = align_face(full_path, landmarks)
-        except Exception:
-            print('full_path: ' + full_path)
-            raise
+        img = Image.open(full_path).convert('RGB')
+        bboxes, _ = detect_faces(img)
+        print(bboxes)
 
         img = transforms.ToPILImage()(img)
         img = self.transformer(img)
