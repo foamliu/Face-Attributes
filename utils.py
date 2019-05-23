@@ -132,13 +132,13 @@ def get_face_attributes(full_path):
 
         if len(landmarks) > 0:
             landmarks = [int(round(x)) for x in landmarks[0]]
-            return True, landmarks
+            return True, bounding_boxes, landmarks
 
     except KeyboardInterrupt:
         raise
     except:
         pass
-    return False, None
+    return False, None, None
 
 
 def align_face(img_fn, facial5points):

@@ -18,9 +18,10 @@ if __name__ == "__main__":
     samples = []
     for item in tqdm(items):
         filename = item['full_path']
-        is_valid, landmarks = get_face_attributes(filename)
+        is_valid, bboxes, landmarks = get_face_attributes(filename)
         if is_valid:
             sample = item
+            sample['bboxes'] = bboxes
             sample['landmarks'] = landmarks
             samples.append(sample)
 
