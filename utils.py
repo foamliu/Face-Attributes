@@ -159,3 +159,28 @@ def align_face(img_fn, facial5points):
     # dst_img = warp_and_crop_face(raw, facial5points)
     dst_img = warp_and_crop_face(raw, facial5points, reference_pts=reference_5pts, crop_size=crop_size)
     return dst_img
+
+
+expression_dict = {0: 'none', 1: 'smile', 2: 'laugh'}
+face_shape_dict = {0: 'square', 1: 'oval', 2: 'heart', 3: 'round', 4: 'triangle'}
+face_type_dict = {0: 'human', 1: 'cartoon'}
+gender_dict = {0: 'female', 1: 'male'}
+glasses_dict = {0: 'none', 1: 'sun', 2: 'common'}
+race_dict = {0: 'yellow', 1: 'white', 2: 'black', 3: 'arabs'}
+
+
+def idx2name(tag, idx):
+    name = None
+    if tag == 'expression':
+        name = expression_dict[idx]
+    elif tag == 'face_shape':
+        name = face_shape_dict[idx]
+    elif tag == 'face_type':
+        name = face_type_dict[idx]
+    elif tag == 'gender':
+        name = gender_dict[idx]
+    elif tag == 'glasses':
+        name = glasses_dict[idx]
+    elif tag == 'race':
+        name = race_dict[idx]
+    return name

@@ -6,7 +6,7 @@ import cv2 as cv
 import numpy as np
 
 from config import *
-from utils import align_face
+from utils import align_face, idx2name
 
 if __name__ == "__main__":
     with open(pickle_file_landmarks, 'rb') as file:
@@ -99,18 +99,18 @@ if __name__ == "__main__":
     for i in range(10):
         sample = sample_preds[i]
 
-        sample['age_out'] = int(age_out[i][0])
-        sample['pitch_out'] = int(pitch_out[i][0])
-        sample['roll_out'] = int(roll_out[i][0])
-        sample['yaw_out'] = int(yaw_out[i][0])
-        sample['beauty_out'] = int(beauty_out[i][0])
-        sample['expression_out'] = int(expression_out[i][0])
-        sample['face_prob_out'] = int(face_prob_out[i][0])
-        sample['face_shape_out'] = int(face_shape_out[i][0])
-        sample['face_type_out'] = int(face_type_out[i][0])
-        sample['gender_out'] = int(gender_out[i][0])
-        sample['glasses_out'] = int(glasses_out[i][0])
-        sample['race_out'] = int(race_out[i][0])
+        sample['age_out'] = age_out[i][0] * 100
+        sample['pitch_out'] = pitch_out[i][0] * 360 - 180
+        sample['roll_out'] = roll_out[i][0] * 360 - 180
+        sample['yaw_out'] = yaw_out[i][0] * 360 - 180
+        sample['beauty_out'] = beauty_out[i][0] * 100
+        sample['expression_out'] = idx2name(int(expression_out[i][0]), 'expression')
+        sample['face_prob_out'] = face_prob_out[i][0]
+        sample['face_shape_out'] = idx2name(int(face_shape_out[i][0]), 'face_shape')
+        sample['face_type_out'] = idx2name(int(face_type_out[i][0]), 'face_type')
+        sample['gender_out'] = idx2name(int(gender_out[i][0]), 'gender')
+        sample['glasses_out'] = idx2name(int(glasses_out[i][0]), 'glasses')
+        sample['race_out'] = idx2name(int(race_out[i][0]), 'race')
 
     with open('sample_preds.json', 'w') as file:
         json.dump(sample_preds, file, indent=4, ensure_ascii=False)
