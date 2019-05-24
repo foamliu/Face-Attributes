@@ -1,10 +1,10 @@
 import pickle
 
-from PIL import Image
+import cv2 as cv
 from torch.utils.data import Dataset
 from torchvision import transforms
 
-from config import pickle_file_landmarks, num_train
+from config import im_size, pickle_file_landmarks, num_train
 
 
 def name2idx(name):
@@ -33,6 +33,17 @@ data_transforms = {
 }
 
 
+def crop_image(img, bbox):
+    x1 = round(bbox[0])
+    y1 = round(bbox[1])
+    x2 = round(bbox[2])
+    y2 = round(bbox[3])
+    w = abs(x2 - x1)
+    h = abs(y2 - y1)
+    crop_img = img[y1:y1 + h, x1:x1 + w]
+    return crop_img
+
+
 class FaceAttributesDataset(Dataset):
     def __init__(self, split):
         with open(pickle_file_landmarks, 'rb') as file:
@@ -50,13 +61,11 @@ class FaceAttributesDataset(Dataset):
     def __getitem__(self, i):
         sample = self.samples[i]
         full_path = sample['full_path']
-        bboxes = sample['bboxes'][0]
-
-        img = Image.open(full_path).convert('RGB')
-
-        print(bboxes)
-        print(bboxes.shape)
-
+        bbox = sample['bboxes'][0]
+        img = cv.imread(full_path)
+        img = crop_image(img, bbox)
+        img = cv.resize(img, (im_size, im_size))
+        img = img[..., ::-1]  # RGB
         img = transforms.ToPILImage()(img)
         img = self.transformer(img)
 

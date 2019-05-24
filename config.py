@@ -5,6 +5,7 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')  # sets de
 # Model parameters
 image_w = 112
 image_h = 112
+im_size = 112
 channel = 3
 
 # Training parameters
