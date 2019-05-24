@@ -4,7 +4,7 @@ import cv2 as cv
 from torch.utils.data import Dataset
 from torchvision import transforms
 
-from config import im_size, pickle_file_landmarks, num_train
+from config import im_size, pickle_file_aligned, num_train
 from utils import name2idx, crop_image
 
 # Data augmentation and normalization for training
@@ -24,7 +24,7 @@ data_transforms = {
 
 class FaceAttributesDataset(Dataset):
     def __init__(self, split):
-        with open(pickle_file_landmarks, 'rb') as file:
+        with open(pickle_file_aligned, 'rb') as file:
             data = pickle.load(file)
 
         samples = data['samples']
