@@ -205,6 +205,6 @@ def crop_image(img, bbox):
     w = abs(x2 - x1)
     h = abs(y2 - y1)
     print(img.shape)
-    print('x1:{} y1:{} x2:{} y2:{}'.format(x1, y1, x2, y2))
+    print('x1:{} y1:{} w:{} h:{}'.format(x1, y1, w, h))
     crop_img = img[y1:y1 + h, x1:x1 + w]
     return crop_img
