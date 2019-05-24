@@ -50,10 +50,12 @@ class FaceAttributesDataset(Dataset):
     def __getitem__(self, i):
         sample = self.samples[i]
         full_path = sample['full_path']
+        bboxes = sample['bboxes'][0]
 
         img = Image.open(full_path).convert('RGB')
-        bboxes, _ = detect_faces(img)
+
         print(bboxes)
+        print(bboxes.shape)
 
         img = transforms.ToPILImage()(img)
         img = self.transformer(img)
