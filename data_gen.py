@@ -1,10 +1,10 @@
 import pickle
+
 from PIL import Image
 from torch.utils.data import Dataset
 from torchvision import transforms
-from mtcnn.detector import detect_faces
+
 from config import pickle_file_landmarks, num_train
-from utils import align_face
 
 
 def name2idx(name):
@@ -76,3 +76,8 @@ class FaceAttributesDataset(Dataset):
 
     def __len__(self):
         return len(self.samples)
+
+
+if __name__ == "__main__":
+    dataset = FaceAttributesDataset('train')
+    print(dataset[0])
