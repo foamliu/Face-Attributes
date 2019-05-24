@@ -5,18 +5,7 @@ from torch.utils.data import Dataset
 from torchvision import transforms
 
 from config import im_size, pickle_file_landmarks, num_train
-
-
-def name2idx(name):
-    lookup_table = {'none': 0, 'smile': 1, 'laugh': 2,
-                    'square': 0, 'oval': 1, 'heart': 2, 'round': 3, 'triangle': 4,
-                    'human': 0, 'cartoon': 1,
-                    'female': 0, 'male': 1,
-                    'sun': 1, 'common': 2,
-                    'yellow': 0, 'white': 1, 'black': 2, 'arabs': 3}
-
-    return lookup_table[name]
-
+from utils import name2idx, crop_image
 
 # Data augmentation and normalization for training
 # Just normalization for validation
@@ -31,17 +20,6 @@ data_transforms = {
         transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
     ]),
 }
-
-
-def crop_image(img, bbox):
-    x1 = round(bbox[0])
-    y1 = round(bbox[1])
-    x2 = round(bbox[2])
-    y2 = round(bbox[3])
-    w = abs(x2 - x1)
-    h = abs(y2 - y1)
-    crop_img = img[y1:y1 + h, x1:x1 + w]
-    return crop_img
 
 
 class FaceAttributesDataset(Dataset):
