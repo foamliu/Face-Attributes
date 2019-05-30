@@ -5,7 +5,7 @@ from torch.utils.data import Dataset
 from torchvision import transforms
 
 from config import im_size, pickle_file_aligned, num_train
-from utils import name2idx, crop_image
+from utils import crop_image
 
 # Data augmentation and normalization for training
 # Just normalization for validation
@@ -47,19 +47,20 @@ class FaceAttributesDataset(Dataset):
         img = transforms.ToPILImage()(img)
         img = self.transformer(img)
 
-        age = sample['attr']['age'] / 100.
-        pitch = (sample['attr']['angle']['pitch'] + 180) / 360
-        roll = (sample['attr']['angle']['roll'] + 180) / 360
-        yaw = (sample['attr']['angle']['yaw'] + 180) / 360
+        # age = sample['attr']['age'] / 100.
+        # pitch = (sample['attr']['angle']['pitch'] + 180) / 360
+        # roll = (sample['attr']['angle']['roll'] + 180) / 360
+        # yaw = (sample['attr']['angle']['yaw'] + 180) / 360
         beauty = sample['attr']['beauty'] / 100.
-        expression = name2idx(sample['attr']['expression']['type'])
-        face_prob = sample['attr']['face_probability']
-        face_shape = name2idx(sample['attr']['face_shape']['type'])
-        face_type = name2idx(sample['attr']['face_type']['type'])
-        gender = name2idx(sample['attr']['gender']['type'])
-        glasses = name2idx(sample['attr']['glasses']['type'])
-        race = name2idx(sample['attr']['race']['type'])
-        return img, (age, pitch, roll, yaw, beauty, expression, face_prob, face_shape, face_type, gender, glasses, race)
+        # expression = name2idx(sample['attr']['expression']['type'])
+        # face_prob = sample['attr']['face_probability']
+        # face_shape = name2idx(sample['attr']['face_shape']['type'])
+        # face_type = name2idx(sample['attr']['face_type']['type'])
+        # gender = name2idx(sample['attr']['gender']['type'])
+        # glasses = name2idx(sample['attr']['glasses']['type'])
+        # race = name2idx(sample['attr']['race']['type'])
+        # return img, (age, pitch, roll, yaw, beauty, expression, face_prob, face_shape, face_type, gender, glasses, race)
+        return img, (beauty)
 
     def __len__(self):
         return len(self.samples)
