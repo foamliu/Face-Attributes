@@ -25,5 +25,6 @@ pickle_file = DATA_DIR + '/' + 'CASIA-WebFace.pkl'
 pickle_file_landmarks = DATA_DIR + '/' + 'CASIA-WebFace-landmarks.pkl'
 pickle_file_aligned = DATA_DIR + '/' + 'CASIA-WebFace-aligned.pkl'
 
-name_list = ['age', 'pitch', 'roll', 'yaw', 'beauty', 'expression', 'face_prob', 'face_shape', 'face_type',
-             'gender', 'glasses', 'race']
+# name_list = ['age', 'pitch', 'roll', 'yaw', 'beauty', 'expression', 'face_prob', 'face_shape', 'face_type',
+#              'gender', 'glasses', 'race']
+name_list = ['beauty']
