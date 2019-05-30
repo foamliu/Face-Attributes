@@ -117,7 +117,8 @@ def train(train_loader, model, criterions, optimizer, epoch, logger):
         # race_label = race.to(device)  # [N, 1]
         # Forward prop.
         output = model(img)  # embedding => [N, 512]
-        age_out, pitch_out, roll_out, yaw_out, beauty_out, expression_out, face_prob_out, face_shape_out, face_type_out, gender_out, glasses_out, race_out = output
+        # age_out, pitch_out, roll_out, yaw_out, beauty_out, expression_out, face_prob_out, face_shape_out, face_type_out, gender_out, glasses_out, race_out = output
+        beauty_out = output
 
         # Calculate loss
         # age_loss = MSELoss(age_out, age_label) * loss_ratio
