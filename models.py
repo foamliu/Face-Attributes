@@ -50,8 +50,8 @@ class FaceAttributesModel(nn.Module):
         x = self.resnet(images)  # [N, 2048, 4, 4]
         x = self.avg_pool(x)
         x = self.conv(x)
-        x = self.bn(x)
-        x = self.dropout(x)
+        # x = self.bn(x)
+        # x = self.dropout(x)
         x = x.view(x.size(0), -1)  # [N, 512]
         # age_out = self.sigmoid(self.age_pred(F.relu(self.age_fc(x))))
         # pitch_out = self.sigmoid(self.pitch_pred(F.relu(self.pitch_fc(x))))
