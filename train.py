@@ -21,7 +21,7 @@ def train_net(args):
 
     # Initialize / load checkpoint
     if checkpoint is None:
-        model = resnet50()
+        model = resnet50(args)
         model = nn.DataParallel(model)
 
         if args.optimizer == 'sgd':
