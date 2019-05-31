@@ -6,7 +6,7 @@ from torch.optim.lr_scheduler import StepLR
 
 from config import device, grad_clip, print_freq, name_list, loss_ratio
 from data_gen import FaceAttributesDataset
-from models import FaceAttributesModel
+from models import resnet50
 from utils import parse_args, save_checkpoint, AverageMeter, LossMeterBag, clip_gradient, get_logger
 
 
@@ -21,7 +21,7 @@ def train_net(args):
 
     # Initialize / load checkpoint
     if checkpoint is None:
-        model = FaceAttributesModel()
+        model = resnet50()
         model = nn.DataParallel(model)
 
         if args.optimizer == 'sgd':
