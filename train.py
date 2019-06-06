@@ -44,7 +44,7 @@ def train_net(args):
     model = model.to(device)
 
     # Loss function
-    MSELoss = nn.MSELoss().to(device)
+    L1Loss = nn.L1Loss().to(device)
     CrossEntropyLoss = nn.CrossEntropyLoss().to(device)
 
     # Custom dataloaders
@@ -62,7 +62,7 @@ def train_net(args):
         # One epoch's training
         train_loss = train(train_loader=train_loader,
                            model=model,
-                           criterions=(MSELoss, CrossEntropyLoss),
+                           criterions=(L1Loss, CrossEntropyLoss),
                            optimizer=optimizer,
                            epoch=epoch,
                            logger=logger)
@@ -72,7 +72,7 @@ def train_net(args):
         # One epoch's validation
         valid_loss = valid(valid_loader=valid_loader,
                            model=model,
-                           criterions=(MSELoss, CrossEntropyLoss),
+                           criterions=(L1Loss, CrossEntropyLoss),
                            logger=logger)
 
         writer.add_scalar('Valid_Loss', valid_loss, epoch)
@@ -95,7 +95,7 @@ def train(train_loader, model, criterions, optimizer, epoch, logger):
 
     losses = AverageMeter()
     loss_bag = LossMeterBag(name_list)
-    MSELoss, CrossEntropyLoss = criterions
+    L1Loss, CrossEntropyLoss = criterions
 
     # Batches
     for i, (img, label) in enumerate(train_loader):
@@ -125,7 +125,7 @@ def train(train_loader, model, criterions, optimizer, epoch, logger):
         # pitch_loss = MSELoss(pitch_out, pitch_label) * loss_ratio
         # roll_loss = MSELoss(roll_out, roll_label) * loss_ratio
         # yaw_loss = MSELoss(yaw_out, yaw_label) * loss_ratio
-        beauty_loss = MSELoss(beauty_out, beauty_label) * loss_ratio
+        beauty_loss = L1Loss(beauty_out, beauty_label) * loss_ratio
         # expression_loss = CrossEntropyLoss(expression_out, expression_label)
         # face_prob_loss = MSELoss(face_prob_out, face_prob_label)
         # face_shape_loss = CrossEntropyLoss(face_shape_out, face_shape_label)
@@ -169,7 +169,7 @@ def valid(valid_loader, model, criterions, logger):
 
     losses = AverageMeter()
     loss_bag = LossMeterBag(name_list)
-    MSELoss, CrossEntropyLoss = criterions
+    L1Loss, CrossEntropyLoss = criterions
 
     # Batches
     for i, (img, label) in enumerate(valid_loader):
@@ -203,7 +203,7 @@ def valid(valid_loader, model, criterions, logger):
         # pitch_loss = MSELoss(pitch_out, pitch_label) * loss_ratio
         # roll_loss = MSELoss(roll_out, roll_label) * loss_ratio
         # yaw_loss = MSELoss(yaw_out, yaw_label) * loss_ratio
-        beauty_loss = MSELoss(beauty_out, beauty_label) * loss_ratio
+        beauty_loss = L1Loss(beauty_out, beauty_label) * loss_ratio
         # expression_loss = CrossEntropyLoss(expression_out, expression_label)
         # face_prob_loss = MSELoss(face_prob_out, face_prob_label)
         # face_shape_loss = CrossEntropyLoss(face_shape_out, face_shape_label)
