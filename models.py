@@ -5,9 +5,9 @@ from torchvision import models
 from config import device
 
 
-class FrameDetectionModel(nn.Module):
+class FaceAttributeModel(nn.Module):
     def __init__(self):
-        super(FrameDetectionModel, self).__init__()
+        super(FaceAttributeModel, self).__init__()
         resnet = models.resnet50(pretrained=True)
         # Remove linear and pool layers (since we're not doing classification)
         modules = list(resnet.children())[:-1]
@@ -27,6 +27,6 @@ if __name__ == "__main__":
     from utils import parse_args
 
     args = parse_args()
-    model = FrameDetectionModel().to(device)
+    model = FaceAttributeModel().to(device)
     summary(model, (3, 224, 224))
 

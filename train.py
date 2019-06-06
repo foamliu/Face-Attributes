@@ -2,11 +2,10 @@ import numpy as np
 import torch
 from tensorboardX import SummaryWriter
 from torch import nn
-from torch.optim.lr_scheduler import StepLR
 
 from config import device, grad_clip, print_freq, name_list, loss_ratio
 from data_gen import FaceAttributesDataset
-from models import resnet50
+from models import FaceAttributeModel
 from utils import parse_args, save_checkpoint, AverageMeter, LossMeterBag, clip_gradient, get_logger
 
 
@@ -21,7 +20,7 @@ def train_net(args):
 
     # Initialize / load checkpoint
     if checkpoint is None:
-        model = resnet50(args)
+        model = FaceAttributeModel()
         model = nn.DataParallel(model)
 
         if args.optimizer == 'sgd':
@@ -57,8 +56,6 @@ def train_net(args):
 
     # Epochs
     for epoch in range(start_epoch, args.end_epoch):
-        # scheduler.step()
-
         # One epoch's training
         train_loss = train(train_loader=train_loader,
                            model=model,
