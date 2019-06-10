@@ -12,7 +12,7 @@ class FaceAttributeModel(nn.Module):
         # Remove linear and pool layers (since we're not doing classification)
         modules = list(resnet.children())[:-1]
         self.resnet = nn.Sequential(*modules)
-        self.fc = nn.Linear(2048, 1)
+        self.fc = nn.Linear(2048, 5)
         self.sigmoid = nn.Sigmoid()
 
     def forward(self, images):
