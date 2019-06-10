@@ -136,6 +136,7 @@ def valid(valid_loader, model, criterions, logger):
     for i, (img, label) in enumerate(valid_loader):
         # Move to GPU, if available
         img = img.to(device)
+        label = label.type(torch.FloatTensor).to(device)  # [N, 1]
 
         # Forward prop.
         output = model(img)  # embedding => [N, 512]
