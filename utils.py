@@ -200,14 +200,14 @@ def name2idx(name):
 
 
 def crop_image(img, bbox):
-    print(bbox.shape)
+    # print(bbox.shape)
     x1 = int(round(bbox[0]))
     y1 = int(round(bbox[1]))
     x2 = int(round(bbox[2]))
     y2 = int(round(bbox[3]))
     w = int(abs(x2 - x1))
     h = int(abs(y2 - y1))
-    print(x1, y1, w, h)
+    # print(x1, y1, w, h)
     # print(img.shape)
     # print('x1:{} y1:{} w:{} h:{}'.format(x1, y1, w, h))
     crop_img = img[y1:y1 + h, x1:x1 + w]
