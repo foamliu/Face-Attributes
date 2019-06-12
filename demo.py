@@ -28,13 +28,13 @@ if __name__ == "__main__":
         full_path = sample['full_path']
         landmarks = sample['landmarks']
         print(full_path)
-        raw = cv.imread(full_path)
-        raw = cv.resize(raw, (image_w, image_h))
+        img = cv.imread(full_path)
+        img = cv.resize(img, (image_w, image_h))
         filename = 'images/{}_raw.jpg'.format(i)
-        cv.imwrite(filename, raw)
-        img = align_face(full_path, landmarks)
-        filename = 'images/{}_img.jpg'.format(i)
         cv.imwrite(filename, img)
+        # img = align_face(full_path, landmarks)
+        # filename = 'images/{}_img.jpg'.format(i)
+        # cv.imwrite(filename, img)
         img = img.transpose(2, 0, 1)
         assert img.shape == (3, image_h, image_w)
         assert np.max(img) <= 255
