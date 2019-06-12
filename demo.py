@@ -3,10 +3,25 @@ import pickle
 import random
 
 import cv2 as cv
-import numpy as np
+import torch
+from torchvision import transforms
 
-from config import *
+from config import device, im_size, pickle_file_landmarks, train_ratio
+from data_gen import data_transforms
 from utils import crop_image
+
+
+def save_images(full_path, i):
+    raw = cv.imread(full_path)
+    resized = cv.resize(raw, (im_size, im_size))
+    filename = 'images/{}_raw.jpg'.format(i)
+    cv.imwrite(filename, resized)
+
+    img = crop_image(raw, bboxes)
+    img = cv.resize(img, (im_size, im_size))
+    filename = 'images/{}_img.jpg'.format(i)
+    cv.imwrite(filename, img)
+
 
 if __name__ == "__main__":
     with open(pickle_file_landmarks, 'rb') as file:
@@ -17,30 +32,27 @@ if __name__ == "__main__":
     num_samples = len(samples)
     num_train = int(train_ratio * num_samples)
     samples = samples[num_train:]
-
     samples = random.sample(samples, 10)
 
-    inputs = torch.zeros([10, 3, image_h, image_w], dtype=torch.float, device=device)
+    inputs = torch.zeros([10, 3, im_size, im_size], dtype=torch.float, device=device)
+
+    transformer = data_transforms['valid']
 
     sample_preds = []
 
     for i, sample in enumerate(samples):
         full_path = sample['full_path']
-        bboxes = sample['bboxes']
-        bboxes = bboxes[0]
+        bbox = sample['bboxes'][0]
         print(full_path)
-        raw = cv.imread(full_path)
-        resized = cv.resize(raw, (image_w, image_h))
-        filename = 'images/{}_raw.jpg'.format(i)
-        cv.imwrite(filename, resized)
-        img = crop_image(raw, bboxes)
-        img = cv.resize(img, (image_w, image_h))
-        filename = 'images/{}_img.jpg'.format(i)
-        cv.imwrite(filename, img)
-        img = img.transpose(2, 0, 1)
-        assert img.shape == (3, image_h, image_w)
-        assert np.max(img) <= 255
-        inputs[i] = torch.FloatTensor(img / 255.)
+        save_images(full_path, i)
+
+        img = cv.imread(full_path)
+        img = crop_image(img, bbox)
+        img = cv.resize(img, (im_size, im_size))
+        img = img[..., ::-1]  # RGB
+        img = transforms.ToPILImage()(img)
+        img = transformer(img)
+        inputs[i] = img
 
         age = sample['attr']['age']
         pitch = sample['attr']['angle']['pitch']

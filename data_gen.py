@@ -6,6 +6,7 @@ from torch.utils.data import Dataset
 from torchvision import transforms
 
 from config import im_size, pickle_file_aligned, num_train
+from utils import crop_image
 
 # Data augmentation and normalization for training
 # Just normalization for validation
@@ -39,9 +40,9 @@ class FaceAttributesDataset(Dataset):
     def __getitem__(self, i):
         sample = self.samples[i]
         full_path = sample['full_path']
-        # bbox = sample['bboxes'][0]
+        bbox = sample['bboxes'][0]
         img = cv.imread(full_path)
-        # img = crop_image(img, bbox)
+        img = crop_image(img, bbox)
         img = cv.resize(img, (im_size, im_size))
         img = img[..., ::-1]  # RGB
         img = transforms.ToPILImage()(img)
