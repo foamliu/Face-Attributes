@@ -2,19 +2,26 @@
 import json
 
 
+def safe_get(dic, key):
+    if key in dic:
+        return dic[key]
+    else:
+        return None
+
+
 def get_attrs(item, split):
-    age = item['age_' + split]
-    pitch = item['pitch_' + split]
-    roll = item['roll_' + split]
-    yaw = item['yaw_' + split]
-    beauty = item['beauty_' + split]
-    expression = item['expression_' + split]
-    face_prob = item['face_prob_' + split]
-    face_shape = item['face_shape_' + split]
-    face_type = item['face_type_' + split]
-    gender = item['gender_' + split]
-    glasses = item['glasses_' + split]
-    race = item['race_' + split]
+    age = safe_get(item, 'age_' + split)
+    pitch = safe_get(item, 'pitch_' + split)
+    roll = safe_get(item, 'roll_' + split)
+    yaw = safe_get(item, 'yaw_' + split)
+    beauty = safe_get(item, 'beauty_' + split)
+    expression = safe_get(item, 'expression_' + split)
+    face_prob = safe_get(item, 'face_prob_' + split)
+    face_shape = safe_get(item, 'face_shape_' + split)
+    face_type = safe_get(item, 'face_type_' + split)
+    gender = safe_get(item, 'gender_' + split)
+    glasses = safe_get(item, 'glasses_' + split)
+    race = safe_get(item, 'race_' + split)
     result = 'age: {}<br>'.format(age)
     result += 'pitch: {}<br>'.format(pitch)
     result += 'roll: {}<br>'.format(roll)
