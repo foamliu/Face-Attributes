@@ -6,7 +6,7 @@ import cv2 as cv
 import numpy as np
 
 from config import *
-from utils import align_face
+from utils import crop_image
 
 if __name__ == "__main__":
     with open(pickle_file_landmarks, 'rb') as file:
@@ -26,15 +26,15 @@ if __name__ == "__main__":
 
     for i, sample in enumerate(samples):
         full_path = sample['full_path']
-        landmarks = sample['landmarks']
+        bboxes = sample['bboxes']
         print(full_path)
-        img = cv.imread(full_path)
-        img = cv.resize(img, (image_w, image_h))
+        raw = cv.imread(full_path)
+        raw = cv.resize(raw, (image_w, image_h))
         filename = 'images/{}_raw.jpg'.format(i)
+        cv.imwrite(filename, raw)
+        img = crop_image(full_path, bboxes)
+        filename = 'images/{}_img.jpg'.format(i)
         cv.imwrite(filename, img)
-        # img = align_face(full_path, landmarks)
-        # filename = 'images/{}_img.jpg'.format(i)
-        # cv.imwrite(filename, img)
         img = img.transpose(2, 0, 1)
         assert img.shape == (3, image_h, image_w)
         assert np.max(img) <= 255
