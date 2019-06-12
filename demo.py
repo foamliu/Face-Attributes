@@ -27,6 +27,7 @@ if __name__ == "__main__":
     for i, sample in enumerate(samples):
         full_path = sample['full_path']
         bboxes = sample['bboxes']
+        bboxes = np.reshape(bboxes, (5,))
         print(full_path)
         raw = cv.imread(full_path)
         raw = cv.resize(raw, (image_w, image_h))
