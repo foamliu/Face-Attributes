@@ -6,7 +6,7 @@ import cv2 as cv
 import numpy as np
 
 from config import *
-from utils import align_face, idx2name
+from utils import align_face
 
 if __name__ == "__main__":
     with open(pickle_file_landmarks, 'rb') as file:
@@ -75,8 +75,10 @@ if __name__ == "__main__":
         output = model(inputs)
 
     print(output.size())
+    out = output.cpu().numpy()
+    print(out.shape)
     # age_out, pitch_out, roll_out, yaw_out, beauty_out, expression_out, face_prob_out, face_shape_out, face_type_out, gender_out, glasses_out, race_out = output
-    beauty_out = output
+    # beauty_out = output
 
     # _, expression_out = expression_out.topk(1, 1, True, True)
     # _, face_shape_out = face_shape_out.topk(1, 1, True, True)
@@ -85,11 +87,11 @@ if __name__ == "__main__":
     # _, glasses_out = glasses_out.topk(1, 1, True, True)
     # _, race_out = race_out.topk(1, 1, True, True)
     #
-    # age_out = age_out.cpu().numpy()
-    # pitch_out = pitch_out.cpu().numpy()
-    # roll_out = roll_out.cpu().numpy()
-    # yaw_out = yaw_out.cpu().numpy()
-    beauty_out = beauty_out.cpu().numpy()
+    age_out = out[:, 0]
+    pitch_out = out[:, 1]
+    roll_out = out[:, 2]
+    yaw_out = out[:, 3]
+    beauty_out = out[:, 4]
     # expression_out = expression_out.cpu().numpy()
     # face_prob_out = face_prob_out.cpu().numpy()
     # face_shape_out = face_shape_out.cpu().numpy()
@@ -101,10 +103,10 @@ if __name__ == "__main__":
     for i in range(10):
         sample = sample_preds[i]
 
-        # sample['age_out'] = int(age_out[i][0] * 100)
-        # sample['pitch_out'] = float('{0:.2f}'.format(pitch_out[i][0] * 360 - 180))
-        # sample['roll_out'] = float('{0:.2f}'.format(roll_out[i][0] * 360 - 180))
-        # sample['yaw_out'] = float('{0:.2f}'.format(yaw_out[i][0] * 360 - 180))
+        sample['age_out'] = int(age_out[i][0] * 100)
+        sample['pitch_out'] = float('{0:.2f}'.format(pitch_out[i][0] * 360 - 180))
+        sample['roll_out'] = float('{0:.2f}'.format(roll_out[i][0] * 360 - 180))
+        sample['yaw_out'] = float('{0:.2f}'.format(yaw_out[i][0] * 360 - 180))
         sample['beauty_out'] = float('{0:.2f}'.format(beauty_out[i][0] * 100))
         # sample['expression_out'] = idx2name(int(expression_out[i][0]), 'expression')
         # sample['face_prob_out'] = float('{0:.4f}'.format(face_prob_out[i][0]))
