@@ -48,7 +48,7 @@ class FaceAttributesDataset(Dataset):
         # img aug
         flip = random.random() >= 0.5
         if flip:
-            img = cv.flip(img, 0)
+            img = cv.flip(img, 1)
 
         img = img[..., ::-1]  # RGB
         img = transforms.ToPILImage()(img)
