@@ -34,9 +34,9 @@ if __name__ == "__main__":
         filename = 'images/{}_raw.jpg'.format(i)
         cv.imwrite(filename, resized)
         img = crop_image(raw, bboxes)
+        img = cv.resize(img, (image_w, image_h))
         filename = 'images/{}_img.jpg'.format(i)
         cv.imwrite(filename, img)
-        img = cv.resize(img, (image_w, image_h))
         img = img.transpose(2, 0, 1)
         assert img.shape == (3, image_h, image_w)
         assert np.max(img) <= 255
