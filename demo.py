@@ -11,13 +11,13 @@ from data_gen import data_transforms
 from utils import crop_image
 
 
-def save_images(full_path, i):
+def save_images(full_path, i, bbox):
     raw = cv.imread(full_path)
     resized = cv.resize(raw, (im_size, im_size))
     filename = 'images/{}_raw.jpg'.format(i)
     cv.imwrite(filename, resized)
 
-    img = crop_image(raw, bboxes)
+    img = crop_image(raw, bbox)
     img = cv.resize(img, (im_size, im_size))
     filename = 'images/{}_img.jpg'.format(i)
     cv.imwrite(filename, img)
@@ -44,7 +44,7 @@ if __name__ == "__main__":
         full_path = sample['full_path']
         bbox = sample['bboxes'][0]
         print(full_path)
-        save_images(full_path, i)
+        save_images(full_path, i, bbox)
 
         img = cv.imread(full_path)
         img = crop_image(img, bbox)
