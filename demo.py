@@ -74,6 +74,7 @@ if __name__ == "__main__":
     with torch.no_grad():
         output = model(inputs)
 
+    print(output.size())
     # age_out, pitch_out, roll_out, yaw_out, beauty_out, expression_out, face_prob_out, face_shape_out, face_type_out, gender_out, glasses_out, race_out = output
     beauty_out = output
 
