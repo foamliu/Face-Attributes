@@ -103,11 +103,11 @@ if __name__ == "__main__":
     for i in range(10):
         sample = sample_preds[i]
 
-        sample['age_out'] = int(age_out[i][0] * 100)
-        sample['pitch_out'] = float('{0:.2f}'.format(pitch_out[i][0] * 360 - 180))
-        sample['roll_out'] = float('{0:.2f}'.format(roll_out[i][0] * 360 - 180))
-        sample['yaw_out'] = float('{0:.2f}'.format(yaw_out[i][0] * 360 - 180))
-        sample['beauty_out'] = float('{0:.2f}'.format(beauty_out[i][0] * 100))
+        sample['age_out'] = int(age_out[i] * 100)
+        sample['pitch_out'] = float('{0:.2f}'.format(pitch_out[i] * 360 - 180))
+        sample['roll_out'] = float('{0:.2f}'.format(roll_out[i] * 360 - 180))
+        sample['yaw_out'] = float('{0:.2f}'.format(yaw_out[i] * 360 - 180))
+        sample['beauty_out'] = float('{0:.2f}'.format(beauty_out[i] * 100))
         # sample['expression_out'] = idx2name(int(expression_out[i][0]), 'expression')
         # sample['face_prob_out'] = float('{0:.4f}'.format(face_prob_out[i][0]))
         # sample['face_shape_out'] = idx2name(int(face_shape_out[i][0]), 'face_shape')
