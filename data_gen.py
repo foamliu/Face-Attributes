@@ -1,4 +1,5 @@
 import pickle
+import random
 
 import cv2 as cv
 import numpy as np
@@ -12,7 +13,6 @@ from utils import crop_image
 # Just normalization for validation
 data_transforms = {
     'train': transforms.Compose([
-        # transforms.RandomHorizontalFlip(),
         transforms.ToTensor(),
         transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]),
     ]),
@@ -44,6 +44,12 @@ class FaceAttributesDataset(Dataset):
         img = cv.imread(full_path)
         img = crop_image(img, bbox)
         img = cv.resize(img, (im_size, im_size))
+
+        # img aug
+        flip = random.random() >= 0.5
+        if flip:
+            img = cv.flip(img, 0)
+
         img = img[..., ::-1]  # RGB
         img = transforms.ToPILImage()(img)
         img = self.transformer(img)
@@ -52,6 +58,10 @@ class FaceAttributesDataset(Dataset):
         pitch = (sample['attr']['angle']['pitch'] + 180) / 360
         roll = (sample['attr']['angle']['roll'] + 180) / 360
         yaw = (sample['attr']['angle']['yaw'] + 180) / 360
+
+        if flip:
+            yaw = 1 - yaw
+
         beauty = sample['attr']['beauty'] / 100.
 
         return img, np.array([age, pitch, roll, yaw, beauty])
