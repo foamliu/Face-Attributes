@@ -1,5 +1,4 @@
 import pickle
-import random
 
 import cv2 as cv
 import numpy as np
@@ -46,10 +45,6 @@ class FaceAttributesDataset(Dataset):
         img = cv.resize(img, (im_size, im_size))
 
         # img aug
-        flip = random.random() >= 0.5
-        if flip:
-            img = cv.flip(img, 1)
-
         img = img[..., ::-1]  # RGB
         img = transforms.ToPILImage()(img)
         img = self.transformer(img)
@@ -58,10 +53,6 @@ class FaceAttributesDataset(Dataset):
         pitch = (sample['attr']['angle']['pitch'] + 180) / 360
         roll = (sample['attr']['angle']['roll'] + 180) / 360
         yaw = (sample['attr']['angle']['yaw'] + 180) / 360
-
-        if flip:
-            yaw = 1 - yaw
-
         beauty = sample['attr']['beauty'] / 100.
 
         return img, np.array([age, pitch, roll, yaw, beauty])
