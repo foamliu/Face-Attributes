@@ -38,5 +38,10 @@ if __name__ == "__main__":
         print(full_path)
         img_path1, img_path2 = save_images(full_path, i, bbox)
 
-        attr = get_face_attributes(full_path)
-        print(attr['angle'])
+        attr = get_face_attributes(img_path1)
+        if attr:
+            print(attr['angle'])
+
+        attr = get_face_attributes(img_path2)
+        if attr:
+            print(attr['angle'])
