@@ -150,19 +150,20 @@ def train(train_loader, model, criterions, optimizer, epoch, logger):
         # Print status
 
         if i % print_freq == 0:
-            status = 'Epoch: [{0}][{1}/{2}]\t'
-            'Loss {loss.val:.4f} ({loss.avg:.4f})\t'
-            'Reg Loss {reg_loss.val:.4f} ({reg_loss.avg:.4f})\t'
-            'Expression Accuracy {expression_acc.val:.4f} ({expression_acc.avg:.4f})\t'
-            'Gender Accuracy {gender_acc.val:.4f} ({gender_acc.avg:.4f})\t'
-            'Glasses Accuracy {expression_acc.val:.4f} ({expression_acc.avg:.4f})\t'
-            'Race Accuracy {expression_acc.val:.4f} ({expression_acc.avg:.4f})\t'.format(epoch, i, len(train_loader),
-                                                                                         loss=losses,
-                                                                                         reg_loss=reg_losses,
-                                                                                         expression_acc=expression_accs,
-                                                                                         gender_acc=gender_accs,
-                                                                                         glasses_acc=glasses_accs,
-                                                                                         race_acc=race_accs)
+            status = 'Epoch: [{0}][{1}/{2}]\t' \
+                     'Loss {loss.val:.4f} ({loss.avg:.4f})\t' \
+                     'Reg Loss {reg_loss.val:.4f} ({reg_loss.avg:.4f})\t' \
+                     'Expression Accuracy {expression_acc.val:.4f} ({expression_acc.avg:.4f})\t' \
+                     'Gender Accuracy {gender_acc.val:.4f} ({gender_acc.avg:.4f})\t' \
+                     'Glasses Accuracy {expression_acc.val:.4f} ({expression_acc.avg:.4f})\t' \
+                     'Race Accuracy {expression_acc.val:.4f} ({expression_acc.avg:.4f})\t'.format(epoch, i,
+                                                                                                  len(train_loader),
+                                                                                                  loss=losses,
+                                                                                                  reg_loss=reg_losses,
+                                                                                                  expression_acc=expression_accs,
+                                                                                                  gender_acc=gender_accs,
+                                                                                                  glasses_acc=glasses_accs,
+                                                                                                  race_acc=race_accs)
             logger.info(status)
             print(status)
 
@@ -218,17 +219,17 @@ def valid(valid_loader, model, criterions, logger):
         race_accs.update(race_accuracy)
 
     # Print status
-    status = 'Validation: Loss {losses.avg:.4f}\t'
-    'Reg Loss {reg_losses.val:.4f} ({reg_losses.avg:.4f})\t'
-    'Expression Accuracy {expression_accs.val:.4f} ({expression_accs.avg:.4f})\t'
-    'Gender Accuracy {gender_accs.val:.4f} ({gender_accs.avg:.4f})\t'
-    'Glasses Accuracy {expression_accs.val:.4f} ({expression_accs.avg:.4f})\t'
-    'Race Accuracy {expression_accs.val:.4f} ({expression_accs.avg:.4f})\n'.format(loss=losses,
-                                                                                   reg_losses=reg_losses,
-                                                                                   expression_accs=expression_accs,
-                                                                                   gender_accs=gender_accs,
-                                                                                   glasses_accs=glasses_accs,
-                                                                                   race_accs=race_accs)
+    status = 'Validation: Loss {loss.avg:.4f}\t' \
+             'Reg Loss {reg_loss.val:.4f} ({reg_loss.avg:.4f})\t' \
+             'Expression Accuracy {expression_acc.val:.4f} ({expression_acc.avg:.4f})\t' \
+             'Gender Accuracy {gender_acc.val:.4f} ({gender_acc.avg:.4f})\t' \
+             'Glasses Accuracy {expression_acc.val:.4f} ({expression_acc.avg:.4f})\t' \
+             'Race Accuracy {expression_acc.val:.4f} ({expression_acc.avg:.4f})\n'.format(loss=losses,
+                                                                                          reg_loss=reg_losses,
+                                                                                          expression_acc=expression_accs,
+                                                                                          gender_acc=gender_accs,
+                                                                                          glasses_acc=glasses_accs,
+                                                                                          race_acc=race_accs)
 
     logger.info(status)
 
