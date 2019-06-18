@@ -114,6 +114,9 @@ def train(train_loader, model, criterions, optimizer, epoch, logger):
         # glasses_out = output[:, 10:13]
         # race_out = output[:, 13:17]
 
+        print(expression_out.size())
+        print(expression_label.size())
+
         # Calculate loss
         reg_loss = L1Loss(reg_out, reg_label) * loss_ratio
         expression_loss = CrossEntropyLoss(expression_out, expression_label)
