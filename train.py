@@ -165,7 +165,6 @@ def train(train_loader, model, criterions, optimizer, epoch, logger):
                                                                                                   glasses_acc=glasses_accs,
                                                                                                   race_acc=race_accs)
             logger.info(status)
-            print(status)
 
     return losses.avg
 
