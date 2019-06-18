@@ -100,10 +100,10 @@ def train(train_loader, model, criterions, optimizer, epoch, logger):
         # Move to GPU, if available
         img = img.to(device)
         reg_label = reg.type(torch.FloatTensor).to(device)  # [N, 5]
-        expression_label = reg.type(torch.LongTensor).to(device)  # [N, 3]
-        gender_label = reg.type(torch.LongTensor).to(device)  # [N, 2]
-        glasses_label = reg.type(torch.LongTensor).to(device)  # [N, 3]
-        race_label = reg.type(torch.LongTensor).to(device)  # [N, 4]
+        expression_label = expression.type(torch.LongTensor).to(device)  # [N, 3]
+        gender_label = gender.type(torch.LongTensor).to(device)  # [N, 2]
+        glasses_label = glasses.type(torch.LongTensor).to(device)  # [N, 3]
+        race_label = race.type(torch.LongTensor).to(device)  # [N, 4]
 
         # Forward prop.
         reg_out, expression_out, gender_out, glasses_out, race_out = model(img)  # embedding => [N, 17]
@@ -114,8 +114,11 @@ def train(train_loader, model, criterions, optimizer, epoch, logger):
         # glasses_out = output[:, 10:13]
         # race_out = output[:, 13:17]
 
-        print(expression_out.size())
-        print(expression_label.size())
+        # print(expression_out.size())
+        # print(reg_label.size())
+        # print(expression_label.size())
+        # print(gender_label.size())
+        # print(expression_label.size())
 
         # Calculate loss
         reg_loss = L1Loss(reg_out, reg_label) * loss_ratio
@@ -158,10 +161,10 @@ def valid(valid_loader, model, criterions, logger):
         # Move to GPU, if available
         img = img.to(device)
         reg_label = reg.type(torch.FloatTensor).to(device)  # [N, 5]
-        expression_label = reg.type(torch.LongTensor).to(device)  # [N, 3]
-        gender_label = reg.type(torch.LongTensor).to(device)  # [N, 2]
-        glasses_label = reg.type(torch.LongTensor).to(device)  # [N, 3]
-        race_label = reg.type(torch.LongTensor).to(device)  # [N, 4]
+        expression_label = expression.type(torch.LongTensor).to(device)  # [N, 3]
+        gender_label = gender.type(torch.LongTensor).to(device)  # [N, 2]
+        glasses_label = glasses.type(torch.LongTensor).to(device)  # [N, 3]
+        race_label = race.type(torch.LongTensor).to(device)  # [N, 4]
 
         # Forward prop.
         reg_out, expression_out, gender_out, glasses_out, race_out = model(img)
