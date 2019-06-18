@@ -14,7 +14,7 @@ class FaceAttributeModel(nn.Module):
         self.resnet = nn.Sequential(*modules)
         self.fc = nn.Linear(2048, 17)
         self.sigmoid = nn.Sigmoid()
-        self.softmax = nn.Softmax()
+        self.softmax = nn.Softmax(dim=-1)
 
     def forward(self, images):
         x = self.resnet(images)  # [N, 2048, 1, 1]
