@@ -106,13 +106,13 @@ def train(train_loader, model, criterions, optimizer, epoch, logger):
         race_label = reg.type(torch.LongTensor).to(device)  # [N, 4]
 
         # Forward prop.
-        output = model(img)  # embedding => [N, 512]
-        print(output.size())
-        reg_out = output[:, :5]
-        expression_out = output[:, 5:8]
-        gender_out = output[:, 8:10]
-        glasses_out = output[:, 10:13]
-        race_out = output[:, 13:17]
+        reg_out, expression_out, gender_out, glasses_out, race_out = model(img)  # embedding => [N, 17]
+        # print(output.size())
+        # reg_out = output[:, :5]
+        # expression_out = output[:, 5:8]
+        # gender_out = output[:, 8:10]
+        # glasses_out = output[:, 10:13]
+        # race_out = output[:, 13:17]
 
         # Calculate loss
         reg_loss = L1Loss(reg_out, reg_label) * loss_ratio
@@ -161,12 +161,12 @@ def valid(valid_loader, model, criterions, logger):
         race_label = reg.type(torch.LongTensor).to(device)  # [N, 4]
 
         # Forward prop.
-        output = model(img)  # embedding => [N, 512]
-        reg_out = output[:, :5]
-        expression_out = output[:, 5:8]
-        gender_out = output[:, 8:10]
-        glasses_out = output[:, 10:13]
-        race_out = output[:, 13:17]
+        reg_out, expression_out, gender_out, glasses_out, race_out = model(img)
+        # reg_out = output[:, :5]
+        # expression_out = output[:, 5:8]
+        # gender_out = output[:, 8:10]
+        # glasses_out = output[:, 10:13]
+        # race_out = output[:, 13:17]
 
         # Calculate loss
         reg_loss = L1Loss(reg_out, reg_label) * loss_ratio
