@@ -6,7 +6,7 @@ from torch.utils.data import Dataset
 from torchvision import transforms
 
 from config import im_size, pickle_file_aligned, num_train
-from utils import crop_image
+from utils import crop_image, name2idx
 
 # Data augmentation and normalization for training
 # Just normalization for validation
@@ -55,7 +55,11 @@ class FaceAttributesDataset(Dataset):
         yaw = (sample['attr']['angle']['yaw'] + 180) / 360
         beauty = sample['attr']['beauty'] / 100.
 
-        return img, np.array([age, pitch, roll, yaw, beauty])
+        expression = name2idx(sample['attr']['expression']['type'])
+        gender = name2idx(sample['attr']['gender']['type'])
+        glasses = name2idx(sample['attr']['glasses']['type'])
+        race = name2idx(sample['attr']['race']['type'])
+        return img, np.array([age, pitch, roll, yaw, beauty]), expression, gender, glasses, race
 
     def __len__(self):
         return len(self.samples)

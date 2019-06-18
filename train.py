@@ -2,7 +2,7 @@ import numpy as np
 import torch
 from tensorboardX import SummaryWriter
 from torch import nn
-from torch.optim.lr_scheduler import StepLR
+
 from config import device, grad_clip, print_freq, loss_ratio
 from data_gen import FaceAttributesDataset
 from models import FaceAttributeModel
@@ -96,16 +96,31 @@ def train(train_loader, model, criterions, optimizer, epoch, logger):
     L1Loss, CrossEntropyLoss = criterions
 
     # Batches
-    for i, (img, label) in enumerate(train_loader):
+    for i, (img, reg, expression, gender, glasses, race) in enumerate(train_loader):
         # Move to GPU, if available
         img = img.to(device)
-        label = label.type(torch.FloatTensor).to(device)  # [N, 1]
+        reg_label = reg.type(torch.FloatTensor).to(device)  # [N, 5]
+        expression_label = reg.type(torch.LongTensor).to(device)  # [N, 3]
+        gender_label = reg.type(torch.LongTensor).to(device)  # [N, 2]
+        glasses_label = reg.type(torch.LongTensor).to(device)  # [N, 3]
+        race_label = reg.type(torch.LongTensor).to(device)  # [N, 4]
 
         # Forward prop.
         output = model(img)  # embedding => [N, 512]
+        reg_out = output[:, :5]
+        expression_out = output[:, 5:8]
+        gender_out = output[:, 8:10]
+        glasses_out = output[:, 10:13]
+        race_out = output[:, 13:17]
 
         # Calculate loss
-        loss = L1Loss(output, label) * loss_ratio
+        reg_loss = L1Loss(reg_out, reg_label) * loss_ratio
+        expression_loss = CrossEntropyLoss(expression_out, expression_label)
+        gender_loss = CrossEntropyLoss(gender_out, gender_label)
+        glasses_loss = CrossEntropyLoss(glasses_out, glasses_label)
+        race_loss = CrossEntropyLoss(race_out, race_label)
+
+        loss = reg_loss + expression_loss + gender_loss + glasses_loss + race_loss
 
         # Back prop.
         optimizer.zero_grad()
@@ -135,16 +150,31 @@ def valid(valid_loader, model, criterions, logger):
     L1Loss, CrossEntropyLoss = criterions
 
     # Batches
-    for i, (img, label) in enumerate(valid_loader):
+    for i, (img, reg, expression, gender, glasses, race) in enumerate(valid_loader):
         # Move to GPU, if available
         img = img.to(device)
-        label = label.type(torch.FloatTensor).to(device)  # [N, 1]
+        reg_label = reg.type(torch.FloatTensor).to(device)  # [N, 5]
+        expression_label = reg.type(torch.LongTensor).to(device)  # [N, 3]
+        gender_label = reg.type(torch.LongTensor).to(device)  # [N, 2]
+        glasses_label = reg.type(torch.LongTensor).to(device)  # [N, 3]
+        race_label = reg.type(torch.LongTensor).to(device)  # [N, 4]
 
         # Forward prop.
         output = model(img)  # embedding => [N, 512]
+        reg_out = output[:, :5]
+        expression_out = output[:, 5:8]
+        gender_out = output[:, 8:10]
+        glasses_out = output[:, 10:13]
+        race_out = output[:, 13:17]
 
         # Calculate loss
-        loss = L1Loss(output, label) * loss_ratio
+        reg_loss = L1Loss(reg_out, reg_label) * loss_ratio
+        expression_loss = CrossEntropyLoss(expression_out, expression_label)
+        gender_loss = CrossEntropyLoss(gender_out, gender_label)
+        glasses_loss = CrossEntropyLoss(glasses_out, glasses_label)
+        race_loss = CrossEntropyLoss(race_out, race_label)
+
+        loss = reg_loss + expression_loss + gender_loss + glasses_loss + race_loss
 
         # Keep track of metrics
         losses.update(loss.item())
