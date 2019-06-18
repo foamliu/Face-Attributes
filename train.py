@@ -107,6 +107,7 @@ def train(train_loader, model, criterions, optimizer, epoch, logger):
 
         # Forward prop.
         output = model(img)  # embedding => [N, 512]
+        print(output.size())
         reg_out = output[:, :5]
         expression_out = output[:, 5:8]
         gender_out = output[:, 8:10]
