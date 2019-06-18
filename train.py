@@ -6,7 +6,7 @@ from torch import nn
 from config import device, grad_clip, print_freq, loss_ratio
 from data_gen import FaceAttributesDataset
 from models import FaceAttributeModel
-from utils import parse_args, save_checkpoint, AverageMeter, clip_gradient, get_logger, accuracy
+from utils import parse_args, save_checkpoint, AverageMeter, clip_gradient, get_logger, accuracy, adjust_learning_rate
 
 
 def train_net(args):
@@ -56,7 +56,11 @@ def train_net(args):
 
     # Epochs
     for epoch in range(start_epoch, args.end_epoch):
-        # scheduler.step(epoch)
+        # Decay learning rate if there is no improvement for 8 consecutive epochs, and terminate training after 20
+        if epochs_since_improvement == 20:
+            break
+        if epochs_since_improvement > 0 and epochs_since_improvement % 8 == 0:
+            adjust_learning_rate(optimizer, 0.8)
 
         # One epoch's training
         train_loss = train(train_loader=train_loader,
