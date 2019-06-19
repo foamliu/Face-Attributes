@@ -8,7 +8,7 @@ from torchvision import transforms
 
 from config import device, im_size, pickle_file_landmarks, train_ratio
 from data_gen import data_transforms
-from utils import crop_image
+from utils import crop_image, idx2name
 
 
 def save_images(full_path, i, bbox):
@@ -86,33 +86,33 @@ if __name__ == "__main__":
     model.eval()
 
     with torch.no_grad():
-        output = model(inputs)
+        reg_out, expression_out, gender_out, glasses_out, race_out = model(inputs)
 
-    print(output.size())
-    out = output.cpu().numpy()
-    print(out.shape)
-    # age_out, pitch_out, roll_out, yaw_out, beauty_out, expression_out, face_prob_out, face_shape_out, face_type_out, gender_out, glasses_out, race_out = output
-    # beauty_out = output
+    print(reg_out.size())
+    reg_out = reg_out.cpu().numpy()
+    age_out = reg_out[:, 0]
+    pitch_out = reg_out[:, 1]
+    roll_out = reg_out[:, 2]
+    yaw_out = reg_out[:, 3]
+    beauty_out = reg_out[:, 4]
 
-    # _, expression_out = expression_out.topk(1, 1, True, True)
-    # _, face_shape_out = face_shape_out.topk(1, 1, True, True)
-    # _, face_type_out = face_type_out.topk(1, 1, True, True)
-    # _, gender_out = gender_out.topk(1, 1, True, True)
-    # _, glasses_out = glasses_out.topk(1, 1, True, True)
-    # _, race_out = race_out.topk(1, 1, True, True)
-    #
-    age_out = out[:, 0]
-    pitch_out = out[:, 1]
-    roll_out = out[:, 2]
-    yaw_out = out[:, 3]
-    beauty_out = out[:, 4]
-    # expression_out = expression_out.cpu().numpy()
-    # face_prob_out = face_prob_out.cpu().numpy()
-    # face_shape_out = face_shape_out.cpu().numpy()
-    # face_type_out = face_type_out.cpu().numpy()
-    # gender_out = gender_out.cpu().numpy()
-    # glasses_out = glasses_out.cpu().numpy()
-    # race_out = race_out.cpu().numpy()
+    _, expression_out = expression_out.topk(1, 1, True, True)
+    print('expression_out.size(): ' + str(expression_out.size()))
+    _, gender_out = gender_out.topk(1, 1, True, True)
+    print('gender_out.size(): ' + str(gender_out.size()))
+    _, glasses_out = glasses_out.topk(1, 1, True, True)
+    print('glasses_out.size(): ' + str(glasses_out.size()))
+    _, race_out = race_out.topk(1, 1, True, True)
+    print('race_out.size(): ' + str(race_out.size()))
+
+    expression_out = expression_out.cpu().numpy()
+    print('expression_out.shape: ' + str(expression_out.shape))
+    gender_out = gender_out.cpu().numpy()
+    print('gender_out.shape: ' + str(gender_out.shape))
+    glasses_out = glasses_out.cpu().numpy()
+    print('glasses_out.shape: ' + str(glasses_out.shape))
+    race_out = race_out.cpu().numpy()
+    print('race_out.shape: ' + str(race_out.shape))
 
     for i in range(10):
         sample = sample_preds[i]
@@ -122,13 +122,10 @@ if __name__ == "__main__":
         sample['roll_out'] = float('{0:.2f}'.format(roll_out[i] * 360 - 180))
         sample['yaw_out'] = float('{0:.2f}'.format(yaw_out[i] * 360 - 180))
         sample['beauty_out'] = float('{0:.2f}'.format(beauty_out[i] * 100))
-        # sample['expression_out'] = idx2name(int(expression_out[i][0]), 'expression')
-        # sample['face_prob_out'] = float('{0:.4f}'.format(face_prob_out[i][0]))
-        # sample['face_shape_out'] = idx2name(int(face_shape_out[i][0]), 'face_shape')
-        # sample['face_type_out'] = idx2name(int(face_type_out[i][0]), 'face_type')
-        # sample['gender_out'] = idx2name(int(gender_out[i][0]), 'gender')
-        # sample['glasses_out'] = idx2name(int(glasses_out[i][0]), 'glasses')
-        # sample['race_out'] = idx2name(int(race_out[i][0]), 'race')
+        sample['expression_out'] = idx2name(int(expression_out[i][0]), 'expression')
+        sample['gender_out'] = idx2name(int(gender_out[i][0]), 'gender')
+        sample['glasses_out'] = idx2name(int(glasses_out[i][0]), 'glasses')
+        sample['race_out'] = idx2name(int(race_out[i][0]), 'race')
 
     with open('sample_preds.json', 'w') as file:
         json.dump(sample_preds, file, indent=4, ensure_ascii=False)
