@@ -71,6 +71,8 @@ To visualize the training process：
 $ tensorboard --logdir=runs
 ```
 
+![image](https://github.com/foamliu/Face-Attributes/raw/master/images/learning_curve.jpg)
+
 Image | Aligned | Out | True |
 |---|---|---|---|
 |![image](https://github.com/foamliu/Face-Attributes/raw/master/images/0_raw.jpg)|![image](https://github.com/foamliu/Face-Attributes/raw/master/images/0_img.jpg)|age: 31<br>pitch: 7.43<br>roll: 4.03<br>yaw: -4.39<br>beauty: 37.45<br>expression: smile<br>gender: male<br>glasses: none<br>race: white|age: 30<br>pitch: 9.56<br>roll: 3.02<br>yaw: -8.24<br>beauty: 37.73<br>expression: smile<br>gender: male<br>glasses: none<br>race: white|
