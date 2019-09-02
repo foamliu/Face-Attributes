@@ -29,9 +29,6 @@ class FaceAttributeModel(nn.Module):
 
 
 if __name__ == "__main__":
-    from utils import parse_args
-
-    args = parse_args()
     model = FaceAttributeModel().to(device)
-    summary(model, (3, 224, 224))
+    summary(model, input_size=(3, 224, 224))
 
